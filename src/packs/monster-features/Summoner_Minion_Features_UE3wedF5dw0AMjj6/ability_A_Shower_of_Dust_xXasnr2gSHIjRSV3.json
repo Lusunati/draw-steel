@@ -6,8 +6,8 @@
   "img": "icons/magic/air/air-wave-gust-blue.webp",
   "system": {
     "source": {
-      "book": "",
-      "page": "",
+      "book": "Summoner",
+      "page": "43",
       "license": "Draw Steel Creator License"
     },
     "_dsid": "a-shower-of-dust",

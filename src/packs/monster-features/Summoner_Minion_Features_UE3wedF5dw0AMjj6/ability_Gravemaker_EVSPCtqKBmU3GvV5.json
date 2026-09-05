@@ -6,8 +6,8 @@
   "img": "icons/magic/death/weapon-sword-skull-purple.webp",
   "system": {
     "source": {
-      "book": "",
-      "page": "",
+      "book": "Summoner",
+      "page": "44",
       "license": "Draw Steel Creator License"
     },
     "_dsid": "gravemaker",

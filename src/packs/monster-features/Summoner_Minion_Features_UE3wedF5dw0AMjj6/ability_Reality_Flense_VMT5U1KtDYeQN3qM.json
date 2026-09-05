@@ -6,8 +6,8 @@
   "img": "icons/magic/unholy/projectile-flame-white-purple.webp",
   "system": {
     "source": {
-      "book": "",
-      "page": "",
+      "book": "Summoner",
+      "page": "41",
       "license": "Draw Steel Creator License"
     },
     "_dsid": "reality-flense",

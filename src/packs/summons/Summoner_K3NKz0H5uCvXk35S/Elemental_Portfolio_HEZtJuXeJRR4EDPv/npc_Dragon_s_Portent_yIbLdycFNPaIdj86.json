@@ -199,57 +199,13 @@
   },
   "items": [
     {
-      "name": "Your Stamina",
-      "type": "feature",
-      "_id": "y2RL39GKEKYjERro",
-      "img": "icons/creatures/unholy/demon-hairy-winged-pink.webp",
-      "system": {
-        "description": {
-          "value": "<p>This creature's maximum stamina is equal to your maximum stamina.</p>",
-          "director": ""
-        },
-        "source": {
-          "book": "",
-          "page": "",
-          "license": ""
-        },
-        "_dsid": "your-stamina",
-        "advancements": {},
-        "prerequisites": {
-          "value": "",
-          "dsid": [],
-          "level": null
-        }
-      },
-      "effects": [],
-      "flags": {},
-      "_stats": {
-        "coreVersion": "14.367",
-        "systemId": "draw-steel",
-        "systemVersion": "1.2",
-        "createdTime": 1788546932463,
-        "modifiedTime": null,
-        "lastModifiedBy": null,
-        "compendiumSource": null,
-        "duplicateSource": null,
-        "exportSource": null
-      },
-      "ownership": {
-        "default": 0,
-        "bULgfeSVOL2yapd0": 3
-      },
-      "folder": null,
-      "sort": 0,
-      "_key": "!actors.items!yIbLdycFNPaIdj86.y2RL39GKEKYjERro"
-    },
-    {
-      "name": "Affinity Immunity + Free Strike",
+      "name": "Affinity",
       "type": "feature",
       "_id": "HhWg3g1qm5f5ijs2",
-      "img": "icons/creatures/unholy/demon-hairy-winged-pink.webp",
+      "img": "icons/magic/symbols/elements-air-earth-fire-water.webp",
       "system": {
         "description": {
-          "value": "<p>The [[lookup @name]] selects an affinity for one of the following damage types when they are summoned: acid, cold, corruption, fire, lightning, or poison. This type determines the Portent's affinity immunity, free strikes, and the damage type of their abilities.</p>",
+          "value": "<p>The [[lookup @name]] selects an affinity for one of the following damage types when they are summoned: [[/apply Wpg9mPv5APS1vLFS]]{acid}, [[/apply 8VCBHfS8jq8CHpeK]]{cold}, [[/apply 0So7FDEwMFZZXpB6]]{corruption}, [[/apply Vi1APXP3KxI4jlQe]]{fire}, [[/apply 3YqFXoNYEQTCxwbA]]{lightning}, or [[/apply lRgZXiBUBc1uvuP9]]{poison}. This type determines the Portent's affinity immunity, free strikes, and the damage type of their abilities.</p>",
           "director": ""
         },
         "source": {
@@ -265,7 +221,404 @@
           "level": null
         }
       },
-      "effects": [],
+      "effects": [
+        {
+          "name": "Fire Affinity",
+          "img": "icons/magic/fire/flame-burning-campfire-orange.webp",
+          "type": "base",
+          "origin": "Compendium.draw-steel.summons.Actor.yIbLdycFNPaIdj86.Item.HhWg3g1qm5f5ijs2",
+          "transfer": false,
+          "_id": "Vi1APXP3KxI4jlQe",
+          "system": {
+            "changes": [
+              {
+                "key": "system.combat.freeStrikeType",
+                "type": "override",
+                "value": "fire",
+                "phase": "initial",
+                "priority": null
+              },
+              {
+                "key": "system.damage.immunities.fire",
+                "type": "add",
+                "value": "flags.draw-steel.summoner",
+                "phase": "initial",
+                "priority": null
+              }
+            ],
+            "end": {
+              "roll": "1d10 + @combat.save.bonus"
+            },
+            "project": {
+              "prerequisites": "",
+              "source": "",
+              "rollCharacteristic": [],
+              "yield": {
+                "kind": "weapon",
+                "amount": "1",
+                "display": ""
+              }
+            }
+          },
+          "disabled": true,
+          "start": null,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "",
+          "tint": "#ffffff",
+          "statuses": [],
+          "showIcon": 1,
+          "folder": null,
+          "sort": 0,
+          "flags": {},
+          "_stats": {
+            "coreVersion": "14.367",
+            "systemId": "draw-steel",
+            "systemVersion": "1.2",
+            "createdTime": 1788638972927,
+            "modifiedTime": 1788639378446,
+            "lastModifiedBy": null,
+            "compendiumSource": null,
+            "duplicateSource": null,
+            "exportSource": null
+          },
+          "_key": "!actors.items.effects!yIbLdycFNPaIdj86.HhWg3g1qm5f5ijs2.Vi1APXP3KxI4jlQe"
+        },
+        {
+          "name": "Cold Affinity",
+          "img": "icons/magic/water/barrier-ice-crystal-wall-faceted.webp",
+          "type": "base",
+          "origin": "Compendium.draw-steel.summons.Actor.yIbLdycFNPaIdj86.Item.HhWg3g1qm5f5ijs2",
+          "transfer": false,
+          "_id": "8VCBHfS8jq8CHpeK",
+          "system": {
+            "changes": [
+              {
+                "key": "system.combat.freeStrikeType",
+                "type": "override",
+                "value": "cold",
+                "phase": "initial",
+                "priority": null
+              },
+              {
+                "key": "system.damage.immunities.cold",
+                "type": "override",
+                "value": "flags.draw-steel.summoner",
+                "phase": "initial",
+                "priority": null
+              }
+            ],
+            "end": {
+              "roll": "1d10 + @combat.save.bonus"
+            },
+            "project": {
+              "prerequisites": "",
+              "source": "",
+              "rollCharacteristic": [],
+              "yield": {
+                "kind": "weapon",
+                "amount": "1",
+                "display": ""
+              }
+            }
+          },
+          "disabled": false,
+          "start": null,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "",
+          "tint": "#ffffff",
+          "statuses": [],
+          "showIcon": 1,
+          "folder": null,
+          "sort": 0,
+          "flags": {},
+          "_stats": {
+            "coreVersion": "14.367",
+            "systemId": "draw-steel",
+            "systemVersion": "1.2",
+            "createdTime": 1788639737310,
+            "modifiedTime": 1788639974691,
+            "lastModifiedBy": null,
+            "compendiumSource": null,
+            "duplicateSource": null,
+            "exportSource": null
+          },
+          "_key": "!actors.items.effects!yIbLdycFNPaIdj86.HhWg3g1qm5f5ijs2.8VCBHfS8jq8CHpeK"
+        },
+        {
+          "name": "Acid Affinity",
+          "img": "icons/magic/acid/dissolve-pool-bubbles.webp",
+          "type": "base",
+          "origin": "Compendium.draw-steel.summons.Actor.yIbLdycFNPaIdj86.Item.HhWg3g1qm5f5ijs2",
+          "transfer": false,
+          "_id": "Wpg9mPv5APS1vLFS",
+          "system": {
+            "changes": [
+              {
+                "key": "system.combat.freeStrikeType",
+                "type": "override",
+                "value": "acid",
+                "phase": "initial",
+                "priority": null
+              },
+              {
+                "key": "system.damage.immunities.acid",
+                "type": "override",
+                "value": "flags.draw-steel.summoner",
+                "phase": "initial",
+                "priority": null
+              }
+            ],
+            "end": {
+              "roll": "1d10 + @combat.save.bonus"
+            },
+            "project": {
+              "prerequisites": "",
+              "source": "",
+              "rollCharacteristic": [],
+              "yield": {
+                "kind": "weapon",
+                "amount": "1",
+                "display": ""
+              }
+            }
+          },
+          "disabled": false,
+          "start": null,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "",
+          "tint": "#ffffff",
+          "statuses": [],
+          "showIcon": 1,
+          "folder": null,
+          "sort": 0,
+          "flags": {},
+          "_stats": {
+            "coreVersion": "14.367",
+            "systemId": "draw-steel",
+            "systemVersion": "1.2",
+            "createdTime": 1788639803511,
+            "modifiedTime": 1788639967947,
+            "lastModifiedBy": null,
+            "compendiumSource": null,
+            "duplicateSource": null,
+            "exportSource": null
+          },
+          "_key": "!actors.items.effects!yIbLdycFNPaIdj86.HhWg3g1qm5f5ijs2.Wpg9mPv5APS1vLFS"
+        },
+        {
+          "name": "Corruption Affinity",
+          "img": "icons/magic/unholy/barrier-fire-pink.webp",
+          "type": "base",
+          "origin": "Compendium.draw-steel.summons.Actor.yIbLdycFNPaIdj86.Item.HhWg3g1qm5f5ijs2",
+          "transfer": false,
+          "_id": "0So7FDEwMFZZXpB6",
+          "system": {
+            "changes": [
+              {
+                "key": "system.combat.freeStrikeType",
+                "type": "override",
+                "value": "corruption",
+                "phase": "initial",
+                "priority": null
+              },
+              {
+                "key": "system.damage.immunities.corruption",
+                "type": "override",
+                "value": "flags.draw-steel.summoner",
+                "phase": "initial",
+                "priority": null
+              }
+            ],
+            "end": {
+              "roll": "1d10 + @combat.save.bonus"
+            },
+            "project": {
+              "prerequisites": "",
+              "source": "",
+              "rollCharacteristic": [],
+              "yield": {
+                "kind": "weapon",
+                "amount": "1",
+                "display": ""
+              }
+            }
+          },
+          "disabled": false,
+          "start": null,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "",
+          "tint": "#ffffff",
+          "statuses": [],
+          "showIcon": 1,
+          "folder": null,
+          "sort": 0,
+          "flags": {},
+          "_stats": {
+            "coreVersion": "14.367",
+            "systemId": "draw-steel",
+            "systemVersion": "1.2",
+            "createdTime": 1788639881858,
+            "modifiedTime": 1788639966924,
+            "lastModifiedBy": null,
+            "compendiumSource": null,
+            "duplicateSource": null,
+            "exportSource": null
+          },
+          "_key": "!actors.items.effects!yIbLdycFNPaIdj86.HhWg3g1qm5f5ijs2.0So7FDEwMFZZXpB6"
+        },
+        {
+          "name": "Lightning Affinity",
+          "img": "icons/magic/lightning/bolt-forked-blue.webp",
+          "type": "base",
+          "origin": "Compendium.draw-steel.summons.Actor.yIbLdycFNPaIdj86.Item.HhWg3g1qm5f5ijs2",
+          "transfer": false,
+          "_id": "3YqFXoNYEQTCxwbA",
+          "system": {
+            "changes": [
+              {
+                "key": "system.combat.freeStrikeType",
+                "type": "override",
+                "value": "lightning",
+                "phase": "initial",
+                "priority": null
+              },
+              {
+                "key": "system.damage.immunities.lightning",
+                "type": "override",
+                "value": "flags.draw-steel.summoner",
+                "phase": "initial",
+                "priority": null
+              }
+            ],
+            "end": {
+              "roll": "1d10 + @combat.save.bonus"
+            },
+            "project": {
+              "prerequisites": "",
+              "source": "",
+              "rollCharacteristic": [],
+              "yield": {
+                "kind": "weapon",
+                "amount": "1",
+                "display": ""
+              }
+            }
+          },
+          "disabled": false,
+          "start": null,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "",
+          "tint": "#ffffff",
+          "statuses": [],
+          "showIcon": 1,
+          "folder": null,
+          "sort": 0,
+          "flags": {},
+          "_stats": {
+            "coreVersion": "14.367",
+            "systemId": "draw-steel",
+            "systemVersion": "1.2",
+            "createdTime": 1788639981844,
+            "modifiedTime": 1788640149643,
+            "lastModifiedBy": null,
+            "compendiumSource": null,
+            "duplicateSource": null,
+            "exportSource": null
+          },
+          "_key": "!actors.items.effects!yIbLdycFNPaIdj86.HhWg3g1qm5f5ijs2.3YqFXoNYEQTCxwbA"
+        },
+        {
+          "name": "Poison Affinity",
+          "img": "icons/skills/toxins/cauldron-bubbles-overflow-green.webp",
+          "type": "base",
+          "origin": "Compendium.draw-steel.summons.Actor.yIbLdycFNPaIdj86.Item.HhWg3g1qm5f5ijs2",
+          "transfer": false,
+          "_id": "lRgZXiBUBc1uvuP9",
+          "system": {
+            "changes": [
+              {
+                "key": "system.combat.freeStrikeType",
+                "type": "add",
+                "value": "poison",
+                "phase": "initial",
+                "priority": null
+              },
+              {
+                "key": "system.damage.immunities.poison",
+                "type": "add",
+                "value": "flags.draw-steel.summoner",
+                "phase": "initial",
+                "priority": null
+              }
+            ],
+            "end": {
+              "roll": "1d10 + @combat.save.bonus"
+            },
+            "project": {
+              "prerequisites": "",
+              "source": "",
+              "rollCharacteristic": [],
+              "yield": {
+                "kind": "weapon",
+                "amount": "1",
+                "display": ""
+              }
+            }
+          },
+          "disabled": false,
+          "start": null,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "",
+          "tint": "#ffffff",
+          "statuses": [],
+          "showIcon": 1,
+          "folder": null,
+          "sort": 0,
+          "flags": {},
+          "_stats": {
+            "coreVersion": "14.367",
+            "systemId": "draw-steel",
+            "systemVersion": "1.2",
+            "createdTime": 1788640033909,
+            "modifiedTime": 1788640140049,
+            "lastModifiedBy": null,
+            "compendiumSource": null,
+            "duplicateSource": null,
+            "exportSource": null
+          },
+          "_key": "!actors.items.effects!yIbLdycFNPaIdj86.HhWg3g1qm5f5ijs2.lRgZXiBUBc1uvuP9"
+        }
+      ],
       "folder": null,
       "sort": 0,
       "ownership": {
@@ -516,14 +869,7 @@
               "damage": {
                 "tier1": {
                   "value": "9",
-                  "types": [
-                    "acid",
-                    "cold",
-                    "corruption",
-                    "fire",
-                    "lightning",
-                    "poison"
-                  ],
+                  "types": [],
                   "ignoredImmunities": [],
                   "potency": {
                     "value": "@potency.weak",
@@ -532,14 +878,7 @@
                 },
                 "tier2": {
                   "value": "12",
-                  "types": [
-                    "acid",
-                    "cold",
-                    "corruption",
-                    "fire",
-                    "lightning",
-                    "poison"
-                  ],
+                  "types": [],
                   "ignoredImmunities": [],
                   "potency": {
                     "value": "@potency.average",
@@ -548,14 +887,7 @@
                 },
                 "tier3": {
                   "value": "14",
-                  "types": [
-                    "acid",
-                    "cold",
-                    "corruption",
-                    "fire",
-                    "lightning",
-                    "poison"
-                  ],
+                  "types": [],
                   "ignoredImmunities": [],
                   "potency": {
                     "value": "@potency.strong",
@@ -647,80 +979,429 @@
       "_key": "!actors.items!yIbLdycFNPaIdj86.si3QGkC5ELLKK4C3"
     },
     {
-      "name": "Advancement",
-      "type": "feature",
-      "_id": "JdmTY5AKBoOeu7wA",
-      "img": "icons/svg/upgrade.svg",
+      "name": "A Breath Felt in a Hurricane (LV10)",
+      "type": "ability",
+      "_id": "TEKqkHaA8wbrQ9eT",
+      "img": "icons/magic/symbols/star-rising-purple.webp",
       "system": {
-        "description": {
-          "value": "<p>Your champion gains additional features at 10th level.</p>",
-          "director": ""
-        },
         "source": {
-          "book": "",
-          "page": "",
+          "book": "Summoner",
+          "page": "42",
           "license": "Draw Steel Creator License"
         },
-        "_dsid": "advancement",
-        "advancements": {
-          "ZDgFh2n4gO7UrT7r": {
-            "sort": 200000,
-            "name": "Size Increase",
-            "img": null,
-            "type": "effectGrant",
-            "requirements": {
-              "level": 10
-            },
-            "_id": "ZDgFh2n4gO7UrT7r",
-            "description": "",
-            "repick": {},
-            "pool": [
-              {
-                "uuid": "Compendium.draw-steel.effects.ActiveEffect.odSOGT0uOlhBpBw6"
-              }
-            ],
-            "chooseN": null
-          },
-          "5Ez1RFL7J68Pt8V8": {
-            "sort": 300000,
-            "name": "Breath Felt in a Hurricane",
-            "img": null,
-            "type": "itemGrant",
-            "requirements": {
-              "level": 10
-            },
-            "_id": "5Ez1RFL7J68Pt8V8",
-            "description": "",
-            "repick": {},
-            "pool": [
-              {
-                "uuid": "Compendium.draw-steel.monster-features.Item.TEKqkHaA8wbrQ9eT"
-              }
-            ],
-            "chooseN": null,
-            "additional": {
-              "type": "",
-              "perkType": [],
-              "cost": null
-            }
-          }
-        },
+        "_dsid": "a-breath-felt-in-a-hurricane",
         "prerequisites": {
           "value": "",
           "dsid": [],
           "level": null
+        },
+        "story": "",
+        "keywords": [
+          "area",
+          "magic",
+          "ranged"
+        ],
+        "type": "main",
+        "category": "heroic",
+        "resource": null,
+        "trigger": "",
+        "distance": {
+          "type": "cube",
+          "primary": "4",
+          "secondary": "10",
+          "tertiary": "1"
+        },
+        "damageDisplay": "melee",
+        "target": {
+          "type": "enemyObject",
+          "custom": "",
+          "value": null
+        },
+        "power": {
+          "roll": {
+            "reactive": false,
+            "formula": "@chr",
+            "characteristics": []
+          },
+          "effects": {}
+        },
+        "effects": {
+          "8jKNFSwm49svBI81": {
+            "sort": 100000,
+            "name": "",
+            "img": null,
+            "type": "base",
+            "_id": "8jKNFSwm49svBI81",
+            "description": "<p>[[/gain -1 epic]]</p><p>[[/damage 9 ignoredImmunities=all]]{9 affinity damage}The damage ignores immunity. The affected area becomes difficult terrain. An enemy has affinity weakness 5 while occupying an affected square.</p><p><em>(The Immunity Types are [[/apply 0So7FDEwMFZZXpB6]]{Corruption},[[/apply 3YqFXoNYEQTCxwbA]]{Lightning}, [[/apply lRgZXiBUBc1uvuP9]]{Poison}, [[/apply Vi1APXP3KxI4jlQe]]{Fire}, [[/apply 8VCBHfS8jq8CHpeK]]{Cold} and [[/apply Wpg9mPv5APS1vLFS]]{Acid}.)</em></p>",
+            "before": false
+          }
         }
       },
-      "effects": [],
+      "effects": [
+        {
+          "name": "Fire Affinity",
+          "img": "icons/magic/fire/flame-burning-campfire-orange.webp",
+          "type": "base",
+          "origin": "Compendium.draw-steel.summons.Actor.yIbLdycFNPaIdj86.Item.HhWg3g1qm5f5ijs2",
+          "transfer": false,
+          "_id": "Vi1APXP3KxI4jlQe",
+          "system": {
+            "changes": [
+              {
+                "key": "system.damage.weaknesses.fire",
+                "type": "override",
+                "value": 5,
+                "phase": "initial",
+                "priority": null
+              }
+            ],
+            "end": {
+              "roll": "1d10 + @combat.save.bonus"
+            },
+            "project": {
+              "prerequisites": "",
+              "source": "",
+              "rollCharacteristic": [],
+              "yield": {
+                "kind": "weapon",
+                "amount": "1",
+                "display": ""
+              }
+            }
+          },
+          "disabled": true,
+          "start": null,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "",
+          "tint": "#ffffff",
+          "statuses": [],
+          "showIcon": 1,
+          "flags": {},
+          "_stats": {
+            "coreVersion": "14.367",
+            "systemId": "draw-steel",
+            "systemVersion": "1.2",
+            "createdTime": 1788642191692,
+            "modifiedTime": 1788642191692,
+            "lastModifiedBy": null,
+            "compendiumSource": "Compendium.draw-steel.summons.Actor.yIbLdycFNPaIdj86.Item.HhWg3g1qm5f5ijs2.ActiveEffect.Vi1APXP3KxI4jlQe",
+            "duplicateSource": null,
+            "exportSource": null
+          },
+          "folder": null,
+          "sort": 100000,
+          "_key": "!actors.items.effects!yIbLdycFNPaIdj86.TEKqkHaA8wbrQ9eT.Vi1APXP3KxI4jlQe"
+        },
+        {
+          "name": "Cold Affinity",
+          "img": "icons/magic/water/barrier-ice-crystal-wall-faceted.webp",
+          "type": "base",
+          "origin": "Compendium.draw-steel.summons.Actor.yIbLdycFNPaIdj86.Item.HhWg3g1qm5f5ijs2",
+          "transfer": false,
+          "_id": "8VCBHfS8jq8CHpeK",
+          "system": {
+            "changes": [
+              {
+                "key": "system.damage.weaknesses.cold",
+                "type": "override",
+                "value": 5,
+                "phase": "initial",
+                "priority": null
+              }
+            ],
+            "end": {
+              "roll": "1d10 + @combat.save.bonus"
+            },
+            "project": {
+              "prerequisites": "",
+              "source": "",
+              "rollCharacteristic": [],
+              "yield": {
+                "kind": "weapon",
+                "amount": "1",
+                "display": ""
+              }
+            }
+          },
+          "disabled": false,
+          "start": null,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "",
+          "tint": "#ffffff",
+          "statuses": [],
+          "showIcon": 1,
+          "flags": {},
+          "_stats": {
+            "coreVersion": "14.367",
+            "systemId": "draw-steel",
+            "systemVersion": "1.2",
+            "createdTime": 1788642191692,
+            "modifiedTime": 1788642191692,
+            "lastModifiedBy": null,
+            "compendiumSource": "Compendium.draw-steel.summons.Actor.yIbLdycFNPaIdj86.Item.HhWg3g1qm5f5ijs2.ActiveEffect.8VCBHfS8jq8CHpeK",
+            "duplicateSource": null,
+            "exportSource": null
+          },
+          "folder": null,
+          "sort": 200000,
+          "_key": "!actors.items.effects!yIbLdycFNPaIdj86.TEKqkHaA8wbrQ9eT.8VCBHfS8jq8CHpeK"
+        },
+        {
+          "name": "Acid Affinity",
+          "img": "icons/magic/acid/dissolve-pool-bubbles.webp",
+          "type": "base",
+          "origin": "Compendium.draw-steel.summons.Actor.yIbLdycFNPaIdj86.Item.HhWg3g1qm5f5ijs2",
+          "transfer": false,
+          "_id": "Wpg9mPv5APS1vLFS",
+          "system": {
+            "changes": [
+              {
+                "key": "system.damage.weaknesses.acid",
+                "type": "override",
+                "value": "flags.draw-steel.summoner",
+                "phase": "initial",
+                "priority": null
+              }
+            ],
+            "end": {
+              "roll": "1d10 + @combat.save.bonus"
+            },
+            "project": {
+              "prerequisites": "",
+              "source": "",
+              "rollCharacteristic": [],
+              "yield": {
+                "kind": "weapon",
+                "amount": "1",
+                "display": ""
+              }
+            }
+          },
+          "disabled": false,
+          "start": null,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "",
+          "tint": "#ffffff",
+          "statuses": [],
+          "showIcon": 1,
+          "flags": {},
+          "_stats": {
+            "coreVersion": "14.367",
+            "systemId": "draw-steel",
+            "systemVersion": "1.2",
+            "createdTime": 1788642191692,
+            "modifiedTime": 1788642191692,
+            "lastModifiedBy": null,
+            "compendiumSource": "Compendium.draw-steel.summons.Actor.yIbLdycFNPaIdj86.Item.HhWg3g1qm5f5ijs2.ActiveEffect.Wpg9mPv5APS1vLFS",
+            "duplicateSource": null,
+            "exportSource": null
+          },
+          "folder": null,
+          "sort": 300000,
+          "_key": "!actors.items.effects!yIbLdycFNPaIdj86.TEKqkHaA8wbrQ9eT.Wpg9mPv5APS1vLFS"
+        },
+        {
+          "name": "Corruption Affinity",
+          "img": "icons/magic/unholy/barrier-fire-pink.webp",
+          "type": "base",
+          "origin": "Compendium.draw-steel.summons.Actor.yIbLdycFNPaIdj86.Item.HhWg3g1qm5f5ijs2",
+          "transfer": false,
+          "_id": "0So7FDEwMFZZXpB6",
+          "system": {
+            "changes": [
+              {
+                "key": "system.damage.weaknesses.corruption",
+                "type": "override",
+                "value": 5,
+                "phase": "initial",
+                "priority": null
+              }
+            ],
+            "end": {
+              "roll": "1d10 + @combat.save.bonus"
+            },
+            "project": {
+              "prerequisites": "",
+              "source": "",
+              "rollCharacteristic": [],
+              "yield": {
+                "kind": "weapon",
+                "amount": "1",
+                "display": ""
+              }
+            }
+          },
+          "disabled": false,
+          "start": null,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "",
+          "tint": "#ffffff",
+          "statuses": [],
+          "showIcon": 1,
+          "flags": {},
+          "_stats": {
+            "coreVersion": "14.367",
+            "systemId": "draw-steel",
+            "systemVersion": "1.2",
+            "createdTime": 1788642191692,
+            "modifiedTime": 1788642191692,
+            "lastModifiedBy": null,
+            "compendiumSource": "Compendium.draw-steel.summons.Actor.yIbLdycFNPaIdj86.Item.HhWg3g1qm5f5ijs2.ActiveEffect.0So7FDEwMFZZXpB6",
+            "duplicateSource": null,
+            "exportSource": null
+          },
+          "folder": null,
+          "sort": 0,
+          "_key": "!actors.items.effects!yIbLdycFNPaIdj86.TEKqkHaA8wbrQ9eT.0So7FDEwMFZZXpB6"
+        },
+        {
+          "name": "Lightning Affinity",
+          "img": "icons/magic/lightning/bolt-forked-blue.webp",
+          "type": "base",
+          "origin": "Compendium.draw-steel.summons.Actor.yIbLdycFNPaIdj86.Item.HhWg3g1qm5f5ijs2",
+          "transfer": false,
+          "_id": "3YqFXoNYEQTCxwbA",
+          "system": {
+            "changes": [
+              {
+                "key": "system.damage.weaknesses.lightning",
+                "type": "override",
+                "value": 5,
+                "phase": "initial",
+                "priority": null
+              }
+            ],
+            "end": {
+              "roll": "1d10 + @combat.save.bonus"
+            },
+            "project": {
+              "prerequisites": "",
+              "source": "",
+              "rollCharacteristic": [],
+              "yield": {
+                "kind": "weapon",
+                "amount": "1",
+                "display": ""
+              }
+            }
+          },
+          "disabled": false,
+          "start": null,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "",
+          "tint": "#ffffff",
+          "statuses": [],
+          "showIcon": 1,
+          "flags": {},
+          "_stats": {
+            "coreVersion": "14.367",
+            "systemId": "draw-steel",
+            "systemVersion": "1.2",
+            "createdTime": 1788642191692,
+            "modifiedTime": 1788642191692,
+            "lastModifiedBy": null,
+            "compendiumSource": "Compendium.draw-steel.summons.Actor.yIbLdycFNPaIdj86.Item.HhWg3g1qm5f5ijs2.ActiveEffect.3YqFXoNYEQTCxwbA",
+            "duplicateSource": null,
+            "exportSource": null
+          },
+          "folder": null,
+          "sort": 0,
+          "_key": "!actors.items.effects!yIbLdycFNPaIdj86.TEKqkHaA8wbrQ9eT.3YqFXoNYEQTCxwbA"
+        },
+        {
+          "name": "Poison Affinity",
+          "img": "icons/skills/toxins/cauldron-bubbles-overflow-green.webp",
+          "type": "base",
+          "origin": "Compendium.draw-steel.summons.Actor.yIbLdycFNPaIdj86.Item.HhWg3g1qm5f5ijs2",
+          "transfer": false,
+          "_id": "lRgZXiBUBc1uvuP9",
+          "system": {
+            "changes": [
+              {
+                "key": "system.damage.weaknesses.poison",
+                "type": "override",
+                "value": 5,
+                "phase": "initial",
+                "priority": null
+              }
+            ],
+            "end": {
+              "roll": "1d10 + @combat.save.bonus"
+            },
+            "project": {
+              "prerequisites": "",
+              "source": "",
+              "rollCharacteristic": [],
+              "yield": {
+                "kind": "weapon",
+                "amount": "1",
+                "display": ""
+              }
+            }
+          },
+          "disabled": false,
+          "start": null,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "",
+          "tint": "#ffffff",
+          "statuses": [],
+          "showIcon": 1,
+          "flags": {},
+          "_stats": {
+            "coreVersion": "14.367",
+            "systemId": "draw-steel",
+            "systemVersion": "1.2",
+            "createdTime": 1788642191692,
+            "modifiedTime": 1788642191692,
+            "lastModifiedBy": null,
+            "compendiumSource": "Compendium.draw-steel.summons.Actor.yIbLdycFNPaIdj86.Item.HhWg3g1qm5f5ijs2.ActiveEffect.lRgZXiBUBc1uvuP9",
+            "duplicateSource": null,
+            "exportSource": null
+          },
+          "folder": null,
+          "sort": 0,
+          "_key": "!actors.items.effects!yIbLdycFNPaIdj86.TEKqkHaA8wbrQ9eT.lRgZXiBUBc1uvuP9"
+        }
+      ],
       "flags": {},
       "_stats": {
         "coreVersion": "14.367",
         "systemId": "draw-steel",
         "systemVersion": "1.2",
-        "createdTime": 1788548833207,
+        "createdTime": 1788642191692,
         "modifiedTime": null,
         "lastModifiedBy": null,
-        "compendiumSource": "Compendium.draw-steel.summons.Actor.YOSgMuboci7Tqotp.Item.JdmTY5AKBoOeu7wA",
+        "compendiumSource": "Compendium.draw-steel.monster-features.Item.TEKqkHaA8wbrQ9eT",
         "duplicateSource": null,
         "exportSource": null
       },
@@ -730,10 +1411,78 @@
       },
       "folder": null,
       "sort": 0,
-      "_key": "!actors.items!yIbLdycFNPaIdj86.JdmTY5AKBoOeu7wA"
+      "_key": "!actors.items!yIbLdycFNPaIdj86.TEKqkHaA8wbrQ9eT"
     }
   ],
-  "effects": [],
+  "effects": [
+    {
+      "name": "Size Increase",
+      "img": "icons/magic/control/buff-strength-muscle-damage-red.webp",
+      "type": "base",
+      "origin": null,
+      "_id": "odSOGT0uOlhBpBw6",
+      "system": {
+        "changes": [
+          {
+            "key": "system.combat.size",
+            "type": "upgrade",
+            "value": 3,
+            "phase": "initial",
+            "priority": null
+          }
+        ],
+        "end": {
+          "roll": "1d10 + @combat.save.bonus"
+        },
+        "project": {
+          "prerequisites": "",
+          "source": "",
+          "rollCharacteristic": [],
+          "yield": {
+            "kind": "weapon",
+            "amount": "1",
+            "display": ""
+          },
+          "goal": null
+        }
+      },
+      "disabled": true,
+      "start": {
+        "time": 0,
+        "combat": null,
+        "combatant": null,
+        "initiative": null,
+        "round": null,
+        "turn": null
+      },
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "description": "",
+      "tint": "#ffffff",
+      "transfer": false,
+      "statuses": [],
+      "showIcon": 1,
+      "flags": {},
+      "_stats": {
+        "coreVersion": "14.367",
+        "systemId": "draw-steel",
+        "systemVersion": "1.2",
+        "createdTime": 1788642171314,
+        "modifiedTime": null,
+        "lastModifiedBy": null,
+        "compendiumSource": "Compendium.draw-steel.effects.ActiveEffect.odSOGT0uOlhBpBw6",
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "folder": null,
+      "sort": 0,
+      "_key": "!actors.effects!yIbLdycFNPaIdj86.odSOGT0uOlhBpBw6"
+    }
+  ],
   "ownership": {
     "default": 0
   },
