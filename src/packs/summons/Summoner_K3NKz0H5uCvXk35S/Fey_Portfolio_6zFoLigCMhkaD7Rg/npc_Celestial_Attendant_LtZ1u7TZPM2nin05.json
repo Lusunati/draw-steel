@@ -199,50 +199,6 @@
   },
   "items": [
     {
-      "name": "Your Stamina",
-      "type": "feature",
-      "_id": "y2RL39GKEKYjERro",
-      "img": "icons/creatures/unholy/demon-hairy-winged-pink.webp",
-      "system": {
-        "description": {
-          "value": "<p>This creature's maximum stamina is equal to your maximum stamina.</p>",
-          "director": ""
-        },
-        "source": {
-          "book": "",
-          "page": "",
-          "license": ""
-        },
-        "_dsid": "your-stamina",
-        "advancements": {},
-        "prerequisites": {
-          "value": "",
-          "dsid": [],
-          "level": null
-        }
-      },
-      "effects": [],
-      "flags": {},
-      "_stats": {
-        "coreVersion": "14.367",
-        "systemId": "draw-steel",
-        "systemVersion": "1.2",
-        "createdTime": 1788549084290,
-        "modifiedTime": null,
-        "lastModifiedBy": null,
-        "compendiumSource": null,
-        "duplicateSource": null,
-        "exportSource": null
-      },
-      "ownership": {
-        "default": 0,
-        "bULgfeSVOL2yapd0": 3
-      },
-      "folder": null,
-      "sort": 0,
-      "_key": "!actors.items!LtZ1u7TZPM2nin05.y2RL39GKEKYjERro"
-    },
-    {
       "name": "Champion's Ire",
       "type": "feature",
       "_id": "WYI5Q2RNrIuQAghV",
@@ -613,68 +569,60 @@
       "_key": "!actors.items!LtZ1u7TZPM2nin05.0EZ8lhMkDudvreFN"
     },
     {
-      "name": "Advancement",
-      "type": "feature",
-      "_id": "JdmTY5AKBoOeu7wA",
-      "img": "icons/svg/upgrade.svg",
+      "name": "A Shower of Dust (LV10)",
+      "type": "ability",
+      "_id": "xXasnr2gSHIjRSV3",
+      "img": "icons/magic/air/air-wave-gust-blue.webp",
       "system": {
-        "description": {
-          "value": "<p>Your champion gains additional features at 10th level.</p>",
-          "director": ""
-        },
         "source": {
-          "book": "",
-          "page": "",
+          "book": "Summoner",
+          "page": "43",
           "license": "Draw Steel Creator License"
         },
-        "_dsid": "advancement",
-        "advancements": {
-          "ZDgFh2n4gO7UrT7r": {
-            "sort": 200000,
-            "name": "Size Increase",
-            "img": null,
-            "type": "effectGrant",
-            "requirements": {
-              "level": 10
-            },
-            "_id": "ZDgFh2n4gO7UrT7r",
-            "description": "",
-            "repick": {},
-            "pool": [
-              {
-                "uuid": "Compendium.draw-steel.effects.ActiveEffect.odSOGT0uOlhBpBw6"
-              }
-            ],
-            "chooseN": null
-          },
-          "Na7kkrA7lUh7LNjI": {
-            "sort": 300000,
-            "name": "Shower of Dust",
-            "img": null,
-            "type": "itemGrant",
-            "requirements": {
-              "level": 10
-            },
-            "_id": "Na7kkrA7lUh7LNjI",
-            "description": "",
-            "repick": {},
-            "pool": [
-              {
-                "uuid": "Compendium.draw-steel.monster-features.Item.xXasnr2gSHIjRSV3"
-              }
-            ],
-            "chooseN": null,
-            "additional": {
-              "type": "",
-              "perkType": [],
-              "cost": null
-            }
-          }
-        },
+        "_dsid": "a-shower-of-dust",
         "prerequisites": {
           "value": "",
           "dsid": [],
           "level": null
+        },
+        "story": "",
+        "keywords": [
+          "champion"
+        ],
+        "type": "main",
+        "category": "heroic",
+        "resource": null,
+        "trigger": "",
+        "distance": {
+          "type": "burst",
+          "primary": "20",
+          "secondary": "1",
+          "tertiary": "1"
+        },
+        "damageDisplay": "melee",
+        "target": {
+          "type": "selfAlly",
+          "custom": "Self and each non-minion ally in the area",
+          "value": null
+        },
+        "power": {
+          "roll": {
+            "reactive": false,
+            "formula": "@chr",
+            "characteristics": []
+          },
+          "effects": {}
+        },
+        "effects": {
+          "oYaFyqfdqI1lQZ7F": {
+            "sort": 100000,
+            "name": "",
+            "img": null,
+            "type": "base",
+            "_id": "oYaFyqfdqI1lQZ7F",
+            "description": "<p>[[/gain -1 epic]]</p><p>Each target gains [[/heal 20 temp]] and receives the benefits of one of your Flash Powder effects until the end of their next turn.</p>",
+            "before": false
+          }
         }
       },
       "effects": [],
@@ -683,10 +631,10 @@
         "coreVersion": "14.367",
         "systemId": "draw-steel",
         "systemVersion": "1.2",
-        "createdTime": 1788549377070,
+        "createdTime": 1788642280025,
         "modifiedTime": null,
         "lastModifiedBy": null,
-        "compendiumSource": "Compendium.draw-steel.summons.Actor.yIbLdycFNPaIdj86.Item.JdmTY5AKBoOeu7wA",
+        "compendiumSource": "Compendium.draw-steel.monster-features.Item.xXasnr2gSHIjRSV3",
         "duplicateSource": null,
         "exportSource": null
       },
@@ -696,10 +644,78 @@
       },
       "folder": null,
       "sort": 0,
-      "_key": "!actors.items!LtZ1u7TZPM2nin05.JdmTY5AKBoOeu7wA"
+      "_key": "!actors.items!LtZ1u7TZPM2nin05.xXasnr2gSHIjRSV3"
     }
   ],
-  "effects": [],
+  "effects": [
+    {
+      "name": "Size Increase",
+      "img": "icons/magic/control/buff-strength-muscle-damage-red.webp",
+      "type": "base",
+      "origin": null,
+      "_id": "odSOGT0uOlhBpBw6",
+      "system": {
+        "changes": [
+          {
+            "key": "system.combat.size",
+            "type": "upgrade",
+            "value": 3,
+            "phase": "initial",
+            "priority": null
+          }
+        ],
+        "end": {
+          "roll": "1d10 + @combat.save.bonus"
+        },
+        "project": {
+          "prerequisites": "",
+          "source": "",
+          "rollCharacteristic": [],
+          "yield": {
+            "kind": "weapon",
+            "amount": "1",
+            "display": ""
+          },
+          "goal": null
+        }
+      },
+      "disabled": true,
+      "start": {
+        "time": 0,
+        "combat": null,
+        "combatant": null,
+        "initiative": null,
+        "round": null,
+        "turn": null
+      },
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "description": "",
+      "tint": "#ffffff",
+      "transfer": false,
+      "statuses": [],
+      "showIcon": 1,
+      "flags": {},
+      "_stats": {
+        "coreVersion": "14.367",
+        "systemId": "draw-steel",
+        "systemVersion": "1.2",
+        "createdTime": 1788642265230,
+        "modifiedTime": null,
+        "lastModifiedBy": null,
+        "compendiumSource": "Compendium.draw-steel.effects.ActiveEffect.odSOGT0uOlhBpBw6",
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "folder": null,
+      "sort": 0,
+      "_key": "!actors.effects!LtZ1u7TZPM2nin05.odSOGT0uOlhBpBw6"
+    }
+  ],
   "ownership": {
     "default": 0
   },

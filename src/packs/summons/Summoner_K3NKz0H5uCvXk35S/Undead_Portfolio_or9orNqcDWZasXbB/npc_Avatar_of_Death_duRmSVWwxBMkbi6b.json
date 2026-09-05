@@ -243,98 +243,6 @@
       "_key": "!actors.items!duRmSVWwxBMkbi6b.WYI5Q2RNrIuQAghV"
     },
     {
-      "name": "Your Stamina",
-      "type": "feature",
-      "_id": "y2RL39GKEKYjERro",
-      "img": "icons/creatures/unholy/demon-hairy-winged-pink.webp",
-      "system": {
-        "description": {
-          "value": "<p>This creature's maximum stamina is equal to your maximum stamina.</p>",
-          "director": ""
-        },
-        "source": {
-          "book": "",
-          "page": "",
-          "license": ""
-        },
-        "_dsid": "your-stamina",
-        "advancements": {},
-        "prerequisites": {
-          "value": "",
-          "dsid": [],
-          "level": null
-        }
-      },
-      "effects": [],
-      "flags": {},
-      "_stats": {
-        "coreVersion": "14.367",
-        "systemId": "draw-steel",
-        "systemVersion": "1.2",
-        "createdTime": 1788549086688,
-        "modifiedTime": null,
-        "lastModifiedBy": null,
-        "compendiumSource": null,
-        "duplicateSource": null,
-        "exportSource": null
-      },
-      "ownership": {
-        "default": 0,
-        "bULgfeSVOL2yapd0": 3
-      },
-      "folder": null,
-      "sort": 0,
-      "_key": "!actors.items!duRmSVWwxBMkbi6b.y2RL39GKEKYjERro"
-    },
-    {
-      "name": "Corruption and Poison Immunity + Holy Free Strike",
-      "type": "feature",
-      "_id": "kuNWYyPGX0sZfwTy",
-      "img": "icons/creatures/unholy/demon-hairy-winged-pink.webp",
-      "system": {
-        "description": {
-          "value": "<p>This creature has corruption immunity and poison immunity equal to your Reason. You can choose for their free strikes to deal holy damage.</p>",
-          "director": ""
-        },
-        "source": {
-          "book": "",
-          "page": "",
-          "license": ""
-        },
-        "_dsid": "corruption-immunity-and-free-strike",
-        "advancements": {},
-        "prerequisites": {
-          "value": "",
-          "dsid": [],
-          "level": null
-        }
-      },
-      "effects": [],
-      "flags": {
-        "draw-steel-plus": {
-          "favorite": false
-        }
-      },
-      "_stats": {
-        "coreVersion": "14.367",
-        "systemId": "draw-steel",
-        "systemVersion": "1.2",
-        "createdTime": 1788549086688,
-        "modifiedTime": null,
-        "lastModifiedBy": null,
-        "compendiumSource": null,
-        "duplicateSource": null,
-        "exportSource": null
-      },
-      "ownership": {
-        "default": 0,
-        "bULgfeSVOL2yapd0": 3
-      },
-      "folder": null,
-      "sort": 0,
-      "_key": "!actors.items!duRmSVWwxBMkbi6b.kuNWYyPGX0sZfwTy"
-    },
-    {
       "name": "Revelation Strike",
       "type": "feature",
       "_id": "eV0tPtxM2OPd6v4d",
@@ -675,70 +583,58 @@
       "_key": "!actors.items!duRmSVWwxBMkbi6b.JAgVCOCIqaoLfvNL"
     },
     {
-      "name": "Advancement",
-      "type": "feature",
-      "_id": "JdmTY5AKBoOeu7wA",
-      "img": "icons/svg/upgrade.svg",
+      "name": "Gravemaker (LV10)",
+      "type": "ability",
+      "_id": "EVSPCtqKBmU3GvV5",
+      "img": "icons/magic/death/weapon-sword-skull-purple.webp",
       "system": {
-        "description": {
-          "value": "<p>Your champion gains additional features at 10th level.</p>",
-          "director": ""
-        },
         "source": {
-          "book": "",
-          "page": "",
+          "book": "Summoner",
+          "page": "44",
           "license": "Draw Steel Creator License"
         },
-        "_dsid": "advancement",
-        "advancements": {
-          "ZDgFh2n4gO7UrT7r": {
-            "sort": 200000,
-            "name": "Size Increase",
-            "img": null,
-            "type": "effectGrant",
-            "requirements": {
-              "level": 10
-            },
-            "_id": "ZDgFh2n4gO7UrT7r",
-            "description": "",
-            "repick": {},
-            "pool": [
-              {
-                "uuid": "Compendium.draw-steel.effects.ActiveEffect.odSOGT0uOlhBpBw6"
-              }
-            ],
-            "chooseN": null
-          },
-          "YwiHr63keBl8bjOG": {
-            "sort": 300000,
-            "name": "Gravemaker",
-            "img": null,
-            "type": "itemGrant",
-            "requirements": {
-              "level": 10
-            },
-            "_id": "YwiHr63keBl8bjOG",
-            "description": "",
-            "repick": {
-              "respite": ""
-            },
-            "pool": [
-              {
-                "uuid": "Compendium.draw-steel.monster-features.Item.EVSPCtqKBmU3GvV5"
-              }
-            ],
-            "chooseN": null,
-            "additional": {
-              "type": "",
-              "perkType": [],
-              "cost": null
-            }
-          }
-        },
+        "_dsid": "gravemaker",
         "prerequisites": {
           "value": "",
           "dsid": [],
           "level": null
+        },
+        "story": "",
+        "keywords": [],
+        "type": "main",
+        "category": "",
+        "resource": null,
+        "trigger": "",
+        "distance": {
+          "type": "line",
+          "primary": "5",
+          "secondary": "3",
+          "tertiary": "1"
+        },
+        "damageDisplay": "melee",
+        "target": {
+          "type": "enemyObject",
+          "custom": "",
+          "value": null
+        },
+        "power": {
+          "roll": {
+            "reactive": false,
+            "formula": "@chr",
+            "characteristics": []
+          },
+          "effects": {}
+        },
+        "effects": {
+          "Jlu1nJfR80R4TF4U": {
+            "sort": 100000,
+            "name": "",
+            "img": null,
+            "type": "base",
+            "_id": "Jlu1nJfR80R4TF4U",
+            "description": "<p>[[/gain -1 epic]]</p><p>[[/damage 9 holy]] damage. Each target is vertically pulled a number of squares equal to their size straight down, ignoring stability. If the target would be force moved into the ground, they are buried beneath the ground instead.</p>",
+            "before": false
+          }
         }
       },
       "effects": [],
@@ -747,10 +643,10 @@
         "coreVersion": "14.367",
         "systemId": "draw-steel",
         "systemVersion": "1.2",
-        "createdTime": 1788549773590,
+        "createdTime": 1788642310021,
         "modifiedTime": null,
         "lastModifiedBy": null,
-        "compendiumSource": "Compendium.draw-steel.summons.Actor.yIbLdycFNPaIdj86.Item.JdmTY5AKBoOeu7wA",
+        "compendiumSource": "Compendium.draw-steel.monster-features.Item.EVSPCtqKBmU3GvV5",
         "duplicateSource": null,
         "exportSource": null
       },
@@ -760,10 +656,158 @@
       },
       "folder": null,
       "sort": 0,
-      "_key": "!actors.items!duRmSVWwxBMkbi6b.JdmTY5AKBoOeu7wA"
+      "_key": "!actors.items!duRmSVWwxBMkbi6b.EVSPCtqKBmU3GvV5"
     }
   ],
-  "effects": [],
+  "effects": [
+    {
+      "name": "Size Increase",
+      "img": "icons/magic/control/buff-strength-muscle-damage-red.webp",
+      "type": "base",
+      "origin": null,
+      "_id": "odSOGT0uOlhBpBw6",
+      "system": {
+        "changes": [
+          {
+            "key": "system.combat.size",
+            "type": "upgrade",
+            "value": 3,
+            "phase": "initial",
+            "priority": null
+          }
+        ],
+        "end": {
+          "roll": "1d10 + @combat.save.bonus"
+        },
+        "project": {
+          "prerequisites": "",
+          "source": "",
+          "rollCharacteristic": [],
+          "yield": {
+            "kind": "weapon",
+            "amount": "1",
+            "display": ""
+          },
+          "goal": null
+        }
+      },
+      "disabled": true,
+      "start": {
+        "time": 0,
+        "combat": null,
+        "combatant": null,
+        "initiative": null,
+        "round": null,
+        "turn": null
+      },
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "description": "",
+      "tint": "#ffffff",
+      "transfer": false,
+      "statuses": [],
+      "showIcon": 1,
+      "flags": {},
+      "_stats": {
+        "coreVersion": "14.367",
+        "systemId": "draw-steel",
+        "systemVersion": "1.2",
+        "createdTime": 1788642303455,
+        "modifiedTime": null,
+        "lastModifiedBy": null,
+        "compendiumSource": "Compendium.draw-steel.effects.ActiveEffect.odSOGT0uOlhBpBw6",
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "folder": null,
+      "sort": 0,
+      "_key": "!actors.effects!duRmSVWwxBMkbi6b.odSOGT0uOlhBpBw6"
+    },
+    {
+      "name": "Corruption and Poison Immunity + Holy Free Strike",
+      "img": "icons/svg/combat.svg",
+      "type": "base",
+      "origin": "Compendium.draw-steel.summons.Actor.duRmSVWwxBMkbi6b",
+      "_id": "Du0Htppup2kCto7c",
+      "system": {
+        "changes": [
+          {
+            "key": "system.damage.immunities.corruption",
+            "type": "override",
+            "value": "flags.draw-steel.summoner",
+            "phase": "initial",
+            "priority": null
+          },
+          {
+            "key": "system.damage.immunities.poison",
+            "type": "override",
+            "value": "flags.draw-steel.summoner",
+            "phase": "initial",
+            "priority": null
+          },
+          {
+            "key": "system.combat.freeStrikeDamage",
+            "type": "override",
+            "value": "holy",
+            "phase": "initial",
+            "priority": null
+          }
+        ],
+        "end": {
+          "roll": "1d10 + @combat.save.bonus"
+        },
+        "project": {
+          "prerequisites": "",
+          "source": "",
+          "rollCharacteristic": [],
+          "yield": {
+            "kind": "weapon",
+            "amount": "1",
+            "display": ""
+          }
+        }
+      },
+      "disabled": false,
+      "start": {
+        "time": 0,
+        "combat": null,
+        "combatant": null,
+        "initiative": null,
+        "round": null,
+        "turn": null
+      },
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "description": "",
+      "tint": "#ffffff",
+      "transfer": false,
+      "statuses": [],
+      "showIcon": 1,
+      "folder": null,
+      "sort": 0,
+      "flags": {},
+      "_stats": {
+        "coreVersion": "14.367",
+        "systemId": "draw-steel",
+        "systemVersion": "1.2",
+        "createdTime": 1788642431482,
+        "modifiedTime": null,
+        "lastModifiedBy": null,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.effects!duRmSVWwxBMkbi6b.Du0Htppup2kCto7c"
+    }
+  ],
   "ownership": {
     "default": 0
   },
