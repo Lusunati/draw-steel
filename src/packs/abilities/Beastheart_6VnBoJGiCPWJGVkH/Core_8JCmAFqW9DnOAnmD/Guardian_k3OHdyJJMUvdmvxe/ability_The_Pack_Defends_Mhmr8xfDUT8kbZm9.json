@@ -60,7 +60,7 @@
         "img": null,
         "type": "spend",
         "_id": "ZzATXjbJP8SJ6FAT",
-        "description": "<p><span class=\"txt\">You spend a Recovery without regaining Stamina, and the target regains Stamina equal to your recovery value.</span></p>",
+        "description": "<p>You spend a Recovery without regaining Stamina, and the target regains Stamina equal to your recovery value.</p>",
         "before": false,
         "resource": {
           "value": 1,

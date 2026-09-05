@@ -52,7 +52,7 @@
         "img": null,
         "type": "spend",
         "_id": "cqezgdWCUXC6G3wF",
-        "description": "Your partner can shift up to their speed.",
+        "description": "<p>Your partner can shift up to their speed.</p>",
         "before": false,
         "resource": {
           "value": 1,
@@ -65,7 +65,7 @@
         "img": null,
         "type": "base",
         "_id": "O2CTfBik0U41PK9J",
-        "description": "<p>You must spend a Recovery without regaining Stamina. Your partner gains temporary Stamina equal to your recovery value as they leap out of your chest. Your partner teleports to your space from any distance, even if they don't have line of effect to you.</p>",
+        "description": "<p>You must spend a Recovery without regaining Stamina. Your partner gains [[/heal @recovery.value]]{temporary Stamina} equal to your recovery value as they leap out of your chest. Your partner teleports to your space from any distance, even if they don't have line of effect to you.</p>",
         "before": false
       },
       "ad9GzWwzavA80UI9": {
@@ -74,7 +74,7 @@
         "img": null,
         "type": "spend",
         "_id": "ad9GzWwzavA80UI9",
-        "description": "<p>Your partner gains additional temporary Stamina equal to their Might score for each ferocity spent this way, to a maximum of five ferocity.</p>",
+        "description": "<p>Your partner gains additional temporary Stamina equal to their [[/heal @spend * @M]]{Might score} for each ferocity spent this way, to a maximum of five ferocity.</p>",
         "before": false,
         "resource": {
           "value": 1,

@@ -94,7 +94,7 @@
         "img": null,
         "type": "base",
         "_id": "boDB67az2ZBcMS6m",
-        "description": "<p>Your companion can make a melee free strike. You both shift up to a number of squares equal to [[lookup @I evaluate]]{your Intuition score}.</p>",
+        "description": "<p>Your companion can make a melee free strike. You both shift up to a number of squares equal to [[lookup @I]]{your Intuition score}.</p>",
         "before": false
       }
     }

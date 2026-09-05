@@ -53,7 +53,7 @@
         "img": null,
         "type": "base",
         "_id": "GFXN7KZrv5OhJBar",
-        "description": "<p>The target takes damage equal to [[/damage 3+@M]]{3 + your Might score}. Before you use this ability, you can jump up to a number of squares equal to your Intuition score in a straight line. During this jump, enemies' spaces don't count as difficult terrain for you. The target takes extra lightning damage equal to the number of squares you jumped this way.</p>",
+        "description": "<p>The target takes damage equal to [[/damage 3+@M]]{3 + your Might score}. Before you use this ability, you can jump up to a number of squares equal to [[lookup @I R]]{your Intuition score} in a straight line. During this jump, enemies' spaces don't count as difficult terrain for you. The target takes [[/damage @scaling lightning scaling]]{extra lightning damage} equal to the number of squares you jumped this way.</p>",
         "before": false
       },
       "CUDu5xiKFh1ucVN3": {

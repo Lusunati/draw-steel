@@ -98,7 +98,7 @@
         "img": null,
         "type": "base",
         "_id": "u946bLN0BGbC68jM",
-        "description": "<p>If your companion is in the area, they deal fire damage equal to their Intuition score to each target.</p>",
+        "description": "<p>If your companion is in the area, they deal fire damage equal to their [[/damage @I]]{Intuition score} to each target.</p>",
         "before": false
       }
     }
