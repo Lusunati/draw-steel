@@ -150,7 +150,7 @@
         "img": null,
         "type": "base",
         "_id": "Mdn1xPHwditKacie",
-        "description": "<p>A swallowed creature shares your companion's space, is grabbed and restrained, and has line of effect only to your companion. Nothing has line of effect to the swallowed creature.</p><p>Once per round at the start of your turn, the swallowed creature takes acid damage equal to [[/damage 1+@M]]{1 + your companion's Might score}. If the swallowed creature escapes the grab, your companion immediately regurgitates the creature, who lands prone in an unoccupied square adjacent to your companion. Your companion can also regurgitate a swallowed creature as a free maneuver. Your companion can have only one creature swallowed at a time.</p>",
+        "description": "<p>A swallowed creature shares your companion's space, is grabbed and restrained, and has line of effect only to your companion. Nothing has line of effect to the swallowed creature.</p><p>Once per round at the start of your turn, the swallowed creature takes acid damage equal to [[/damage 1+@M acid]]{1 + your companion's Might score}. If the swallowed creature escapes the grab, your companion immediately regurgitates the creature, who lands prone in an unoccupied square adjacent to your companion. Your companion can also regurgitate a swallowed creature as a free maneuver. Your companion can have only one creature swallowed at a time.</p>",
         "before": false
       }
     }
