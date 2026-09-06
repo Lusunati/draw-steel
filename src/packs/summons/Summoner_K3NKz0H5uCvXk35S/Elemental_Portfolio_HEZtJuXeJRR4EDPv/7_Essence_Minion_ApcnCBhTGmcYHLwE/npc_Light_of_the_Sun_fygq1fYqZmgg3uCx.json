@@ -494,7 +494,7 @@
           {
             "key": "system.damage.immunities.corruption",
             "type": "override",
-            "value": "flags.draw-steel.summoner",
+            "value": "@flags.draw-steel.summoner",
             "phase": "initial",
             "priority": null
           }
@@ -540,7 +540,7 @@
         "coreVersion": "14.367",
         "systemId": "draw-steel",
         "systemVersion": "1.2",
-        "createdTime": 1788693071827,
+        "createdTime": 1788713204560,
         "modifiedTime": null,
         "lastModifiedBy": null,
         "compendiumSource": "Compendium.draw-steel.effects.ActiveEffect.PUjqN6PbQAc22D5b",
@@ -561,7 +561,7 @@
           {
             "key": "system.damage.immunities.fire",
             "type": "override",
-            "value": "flags.draw-steel.summoner",
+            "value": "@flags.draw-steel.summoner",
             "phase": "initial",
             "priority": null
           }
@@ -607,7 +607,7 @@
         "coreVersion": "14.367",
         "systemId": "draw-steel",
         "systemVersion": "1.2",
-        "createdTime": 1788693072970,
+        "createdTime": 1788713206169,
         "modifiedTime": null,
         "lastModifiedBy": null,
         "compendiumSource": "Compendium.draw-steel.effects.ActiveEffect.TSdkgosSfFG6tBI1",

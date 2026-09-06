@@ -291,16 +291,15 @@
   "effects": [
     {
       "name": "Fire Immunity R",
-      "img": "icons/magic/fire/flame-burning-campfire-orange.webp",
       "type": "base",
-      "origin": "Compendium.draw-steel.summons.Actor.EeVovMjZYLoP81TO",
-      "_id": "J88Qy6j5RsxjTo2Z",
+      "_id": "TSdkgosSfFG6tBI1",
+      "img": "icons/magic/fire/flame-burning-campfire-orange.webp",
       "system": {
         "changes": [
           {
             "key": "system.damage.immunities.fire",
             "type": "override",
-            "value": "flags.draw-steel.summoner",
+            "value": "@flags.draw-steel.summoner",
             "phase": "initial",
             "priority": null
           }
@@ -316,7 +315,8 @@
             "kind": "weapon",
             "amount": "1",
             "display": ""
-          }
+          },
+          "goal": null
         }
       },
       "disabled": false,
@@ -335,25 +335,26 @@
         "expired": false
       },
       "description": "",
+      "origin": null,
       "tint": "#ffffff",
       "transfer": false,
       "statuses": [],
       "showIcon": 1,
-      "folder": null,
-      "sort": 0,
       "flags": {},
       "_stats": {
         "coreVersion": "14.367",
         "systemId": "draw-steel",
         "systemVersion": "1.2",
-        "createdTime": 1788691936502,
+        "createdTime": 1788713002868,
         "modifiedTime": null,
         "lastModifiedBy": null,
-        "compendiumSource": null,
+        "compendiumSource": "Compendium.draw-steel.effects.ActiveEffect.TSdkgosSfFG6tBI1",
         "duplicateSource": null,
         "exportSource": null
       },
-      "_key": "!actors.effects!EeVovMjZYLoP81TO.J88Qy6j5RsxjTo2Z"
+      "folder": null,
+      "sort": 0,
+      "_key": "!actors.effects!EeVovMjZYLoP81TO.TSdkgosSfFG6tBI1"
     }
   ],
   "sort": 300000,

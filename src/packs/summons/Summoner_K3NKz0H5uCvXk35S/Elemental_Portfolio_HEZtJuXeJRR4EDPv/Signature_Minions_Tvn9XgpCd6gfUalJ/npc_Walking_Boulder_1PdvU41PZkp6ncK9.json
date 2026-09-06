@@ -286,50 +286,6 @@
         "exportSource": null
       },
       "_key": "!actors.items!1PdvU41PZkp6ncK9.hkI3IXgEaIT1wFuv"
-    },
-    {
-      "name": "Stablility",
-      "type": "feature",
-      "_id": "8oo6AlyM0ttBnMuy",
-      "img": "icons/creatures/unholy/demon-hairy-winged-pink.webp",
-      "system": {
-        "description": {
-          "value": "<p>The [[lookup @name]] has stability equal to your reason.</p>",
-          "director": ""
-        },
-        "source": {
-          "book": "",
-          "page": "",
-          "license": ""
-        },
-        "_dsid": "",
-        "advancements": {},
-        "prerequisites": {
-          "value": "",
-          "dsid": [],
-          "level": null
-        }
-      },
-      "effects": [],
-      "folder": null,
-      "sort": 0,
-      "ownership": {
-        "default": 0,
-        "bULgfeSVOL2yapd0": 3
-      },
-      "flags": {},
-      "_stats": {
-        "coreVersion": "14.367",
-        "systemId": "draw-steel",
-        "systemVersion": "1.2",
-        "createdTime": 1787755857160,
-        "modifiedTime": null,
-        "lastModifiedBy": null,
-        "compendiumSource": null,
-        "duplicateSource": null,
-        "exportSource": null
-      },
-      "_key": "!actors.items!1PdvU41PZkp6ncK9.8oo6AlyM0ttBnMuy"
     }
   ],
   "effects": [
@@ -344,7 +300,7 @@
           {
             "key": "system.combat.stability",
             "type": "override",
-            "value": "flags.draw-steel.summoner",
+            "value": "@flags.draw-steel.summoner",
             "phase": "initial",
             "priority": null
           }

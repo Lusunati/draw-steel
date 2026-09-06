@@ -299,7 +299,7 @@
           {
             "key": "system.damage.immunities.corruption",
             "type": "override",
-            "value": "flags.draw-steel.summoner",
+            "value": "@flags.draw-steel.summoner",
             "phase": "initial",
             "priority": null
           }
@@ -345,7 +345,7 @@
         "coreVersion": "14.367",
         "systemId": "draw-steel",
         "systemVersion": "1.2",
-        "createdTime": 1788693036033,
+        "createdTime": 1788713237632,
         "modifiedTime": null,
         "lastModifiedBy": null,
         "compendiumSource": "Compendium.draw-steel.effects.ActiveEffect.PUjqN6PbQAc22D5b",
@@ -357,7 +357,7 @@
       "_key": "!actors.effects!djoiRR1iQ8UQk0lP.PUjqN6PbQAc22D5b"
     },
     {
-      "name": "Summon Stability",
+      "name": "Stability R",
       "type": "base",
       "_id": "4qFzziQncoqQkZ7f",
       "img": "icons/svg/leg.svg",
@@ -366,7 +366,7 @@
           {
             "key": "system.combat.stability",
             "type": "add",
-            "value": "flags.draw-steel.summoner",
+            "value": "@flags.draw-steel.summoner",
             "phase": "initial",
             "priority": null
           }
@@ -412,7 +412,7 @@
         "coreVersion": "14.367",
         "systemId": "draw-steel",
         "systemVersion": "1.2",
-        "createdTime": 1788693040018,
+        "createdTime": 1788713240234,
         "modifiedTime": null,
         "lastModifiedBy": null,
         "compendiumSource": "Compendium.draw-steel.effects.ActiveEffect.4qFzziQncoqQkZ7f",

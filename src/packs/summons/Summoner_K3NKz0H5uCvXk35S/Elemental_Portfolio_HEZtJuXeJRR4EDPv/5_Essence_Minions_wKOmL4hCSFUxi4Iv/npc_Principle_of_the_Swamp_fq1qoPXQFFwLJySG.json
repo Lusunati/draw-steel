@@ -291,73 +291,6 @@
   ],
   "effects": [
     {
-      "name": "Corruption Immunity R",
-      "type": "base",
-      "_id": "PUjqN6PbQAc22D5b",
-      "img": "icons/magic/unholy/barrier-fire-pink.webp",
-      "system": {
-        "changes": [
-          {
-            "key": "system.damage.immunities.corruption",
-            "type": "override",
-            "value": "flags.draw-steel.summoner",
-            "phase": "initial",
-            "priority": null
-          }
-        ],
-        "end": {
-          "roll": "1d10 + @combat.save.bonus"
-        },
-        "project": {
-          "prerequisites": "",
-          "source": "",
-          "rollCharacteristic": [],
-          "yield": {
-            "kind": "weapon",
-            "amount": "1",
-            "display": ""
-          },
-          "goal": null
-        }
-      },
-      "disabled": false,
-      "start": {
-        "time": 0,
-        "combat": null,
-        "combatant": null,
-        "initiative": null,
-        "round": null,
-        "turn": null
-      },
-      "duration": {
-        "value": null,
-        "units": "seconds",
-        "expiry": null,
-        "expired": false
-      },
-      "description": "",
-      "origin": null,
-      "tint": "#ffffff",
-      "transfer": false,
-      "statuses": [],
-      "showIcon": 1,
-      "flags": {},
-      "_stats": {
-        "coreVersion": "14.367",
-        "systemId": "draw-steel",
-        "systemVersion": "1.2",
-        "createdTime": 1788692666585,
-        "modifiedTime": null,
-        "lastModifiedBy": null,
-        "compendiumSource": "Compendium.draw-steel.effects.ActiveEffect.PUjqN6PbQAc22D5b",
-        "duplicateSource": null,
-        "exportSource": null
-      },
-      "folder": null,
-      "sort": 0,
-      "_key": "!actors.effects!fq1qoPXQFFwLJySG.PUjqN6PbQAc22D5b"
-    },
-    {
       "name": "Poison Immunity R",
       "type": "base",
       "_id": "vOJzbGKojiO91a5R",
@@ -367,7 +300,7 @@
           {
             "key": "system.damage.immunities.poison",
             "type": "override",
-            "value": "flags.draw-steel.summoner",
+            "value": "@flags.draw-steel.summoner",
             "phase": "initial",
             "priority": null
           }
@@ -413,7 +346,7 @@
         "coreVersion": "14.367",
         "systemId": "draw-steel",
         "systemVersion": "1.2",
-        "createdTime": 1788692672545,
+        "createdTime": 1788713152439,
         "modifiedTime": null,
         "lastModifiedBy": null,
         "compendiumSource": "Compendium.draw-steel.effects.ActiveEffect.vOJzbGKojiO91a5R",
@@ -425,16 +358,16 @@
       "_key": "!actors.effects!fq1qoPXQFFwLJySG.vOJzbGKojiO91a5R"
     },
     {
-      "name": "Stability R",
+      "name": "Corruption Immunity R",
       "type": "base",
-      "_id": "4qFzziQncoqQkZ7f",
-      "img": "icons/svg/leg.svg",
+      "_id": "PUjqN6PbQAc22D5b",
+      "img": "icons/magic/unholy/barrier-fire-pink.webp",
       "system": {
         "changes": [
           {
-            "key": "system.combat.stability",
-            "type": "add",
-            "value": "flags.draw-steel.summoner",
+            "key": "system.damage.immunities.corruption",
+            "type": "override",
+            "value": "@flags.draw-steel.summoner",
             "phase": "initial",
             "priority": null
           }
@@ -480,7 +413,74 @@
         "coreVersion": "14.367",
         "systemId": "draw-steel",
         "systemVersion": "1.2",
-        "createdTime": 1788692694643,
+        "createdTime": 1788713163727,
+        "modifiedTime": null,
+        "lastModifiedBy": null,
+        "compendiumSource": "Compendium.draw-steel.effects.ActiveEffect.PUjqN6PbQAc22D5b",
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "folder": null,
+      "sort": 0,
+      "_key": "!actors.effects!fq1qoPXQFFwLJySG.PUjqN6PbQAc22D5b"
+    },
+    {
+      "name": "Stability R",
+      "type": "base",
+      "_id": "4qFzziQncoqQkZ7f",
+      "img": "icons/svg/leg.svg",
+      "system": {
+        "changes": [
+          {
+            "key": "system.combat.stability",
+            "type": "add",
+            "value": "@flags.draw-steel.summoner",
+            "phase": "initial",
+            "priority": null
+          }
+        ],
+        "end": {
+          "roll": "1d10 + @combat.save.bonus"
+        },
+        "project": {
+          "prerequisites": "",
+          "source": "",
+          "rollCharacteristic": [],
+          "yield": {
+            "kind": "weapon",
+            "amount": "1",
+            "display": ""
+          },
+          "goal": null
+        }
+      },
+      "disabled": false,
+      "start": {
+        "time": 0,
+        "combat": null,
+        "combatant": null,
+        "initiative": null,
+        "round": null,
+        "turn": null
+      },
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "description": "",
+      "origin": null,
+      "tint": "#ffffff",
+      "transfer": false,
+      "statuses": [],
+      "showIcon": 1,
+      "flags": {},
+      "_stats": {
+        "coreVersion": "14.367",
+        "systemId": "draw-steel",
+        "systemVersion": "1.2",
+        "createdTime": 1788713167928,
         "modifiedTime": null,
         "lastModifiedBy": null,
         "compendiumSource": "Compendium.draw-steel.effects.ActiveEffect.4qFzziQncoqQkZ7f",

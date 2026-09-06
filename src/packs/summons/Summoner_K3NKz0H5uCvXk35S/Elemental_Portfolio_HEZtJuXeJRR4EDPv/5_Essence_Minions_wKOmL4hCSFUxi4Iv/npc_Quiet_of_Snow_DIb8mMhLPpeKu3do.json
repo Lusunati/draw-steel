@@ -491,7 +491,7 @@
           {
             "key": "system.damage.immunities.sonic",
             "type": "override",
-            "value": "flags.draw-steel.summoner",
+            "value": "@flags.draw-steel.summoner",
             "phase": "initial",
             "priority": null
           }
@@ -537,7 +537,7 @@
         "coreVersion": "14.367",
         "systemId": "draw-steel",
         "systemVersion": "1.2",
-        "createdTime": 1788692722499,
+        "createdTime": 1788713135223,
         "modifiedTime": null,
         "lastModifiedBy": null,
         "compendiumSource": "Compendium.draw-steel.effects.ActiveEffect.GILF44OKhvVltRHb",
@@ -558,7 +558,7 @@
           {
             "key": "system.damage.immunities.cold",
             "type": "override",
-            "value": "flags.draw-steel.summoner",
+            "value": "@flags.draw-steel.summoner",
             "phase": "initial",
             "priority": null
           }
@@ -604,7 +604,7 @@
         "coreVersion": "14.367",
         "systemId": "draw-steel",
         "systemVersion": "1.2",
-        "createdTime": 1788692778268,
+        "createdTime": 1788713136519,
         "modifiedTime": null,
         "lastModifiedBy": null,
         "compendiumSource": "Compendium.draw-steel.effects.ActiveEffect.G8bqdOyGiThIDB8X",
