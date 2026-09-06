@@ -142,7 +142,7 @@
         "type": "base",
         "_id": "rfx39xflcQg0H54X",
         "description": "<p>This ability targets only creatures who are grabbed and are your companion's size or smaller.</p>",
-        "before": false
+        "before": true
       },
       "Mdn1xPHwditKacie": {
         "sort": 200000,
