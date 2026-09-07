@@ -144,7 +144,7 @@
         "img": null,
         "type": "base",
         "_id": "r2F1gLi4pU8vHGwn",
-        "description": "<p>Whenever a target more than 3 squares away from you fails the saving throw while weakened this way, you can pull the target up to a number of squares equal to your Intuition score as a free triggered action.</p>",
+        "description": "<p>Whenever a target more than 3 squares away from you fails the saving throw while weakened this way, you can pull the target up to a number of squares equal to [[lookup @I]]{your Intuition score} as a free triggered action.</p>",
         "before": false
       }
     }
