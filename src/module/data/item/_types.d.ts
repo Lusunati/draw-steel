@@ -110,6 +110,8 @@ declare module "./ability.mjs" {
         banes: number;
         /** Non-persisted. */
         edges: number;
+        /** Critical Modifier */
+        critModifier: number;
         /** Non-persisted, determined if there are power roll effects and it is not reactive. */
         enabled: boolean;
       }

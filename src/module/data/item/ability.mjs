@@ -92,6 +92,7 @@ export default class AbilityModel extends BaseItemModel {
         characteristics: new fields.SetField(setOptions()),
         banes: requiredInteger({ persisted: false }),
         edges: requiredInteger({ persisted: false }),
+        critModifier: new fields.NumberField({ initial: 0, integer: true }),
         enabled: new fields.BooleanField({ persisted: false }),
       }),
       effects: new ds.data.fields.CollectionField(ds.data.pseudoDocuments.powerRollEffects.BasePowerRollEffect),
