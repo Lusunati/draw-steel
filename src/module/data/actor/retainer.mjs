@@ -354,6 +354,11 @@ export default class RetainerModel extends CreatureModel {
   }
 
   /* -------------------------------------------------- */
+  /**
+   * Prepare Embeds of every advancement, using only the unique ones. 
+   * @param {DocumentHTMLEmbedConfig} config Configuration for embed behavior 
+   * @returns  {Promise<HTMLElement>[]}
+   */
   async _getAdvancementEmbeds(config) {
     const advancements = this._getAdvancementItems();
     //Pull Advancements, get each ability who's page ref is the same as the page ref for the retainer OR Not From Monsters
