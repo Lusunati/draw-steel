@@ -1,4 +1,5 @@
 import { requiredInteger, setOptions } from "../helpers.mjs";
+import { systemID, systemPath } from "../../constants.mjs";
 import AdvancementChain from "../../utils/advancement/chain.mjs";
 import CreatureModel from "./creature.mjs";
 import DamagePowerRollEffect from "../pseudo-documents/power-roll-effects/damage-effect.mjs";
@@ -285,5 +286,137 @@ export default class RetainerModel extends CreatureModel {
       }],
       flags: { core: { canPopout: true } },
     });
+  }
+  
+  /* -------------------------------------------------- */
+  
+  /** @inheritdoc */
+  async toEmbed(config, options) {
+    // All NPCs are rendered inline
+    config.inline = true;
+
+    const context = {
+      actor: this.parent,
+      characteristics: this._getCharacteristics(false),
+      damageIW: this._getImmunitiesWeaknesses(),
+      itemEmbeds: await this._getItemEmbeds(config),
+      advancementEmbeds: await this._getAdvancementEmbeds(config),
+      retainerKeywords: this._getRetainerKeywords().join(", "),
+      movement: this._getMovement(true).list,
+      system: this,
+      systemFields: this.schema.fields,
+    };
+
+    const embed = document.createElement("div");
+
+    embed.classList.add("draw-steel", "actor", "npc", "retainer", this.retainer.role || "no-role");
+
+    embed.innerHTML = await foundry.applications.handlebars.renderTemplate(systemPath("templates/embeds/actor/retainer.hbs"), context);
+
+    return embed;
+  }
+
+  /* -------------------------------------------------- */
+
+  /** @inheritdoc */
+  onEmbed(element) {
+    element.querySelector("a[data-action='openSheet']")?.addEventListener("click", () => this.parent.sheet.render({ force: true }));
+  }
+  
+  /* -------------------------------------------------- */
+
+  /**
+   * Fetches the printable string for the retainer's keywords.
+   * @returns {string[]}
+   */
+  _getRetainerKeywords() {
+    const retainerKeywords = ds.CONFIG.monsters.keywords;
+    return Array.from(this.retainer.keywords).map(k => retainerKeywords[k]?.label).filter(_ => _);
+  }
+
+  /* -------------------------------------------------- */
+
+  /**
+   * Prepare embeds of Items for the NPC embed.
+   * @param {DocumentHTMLEmbedConfig} config  Configuration for embedding behavior.
+   * @returns {Promise<HTMLElement[]>}
+   */
+  async _getItemEmbeds(config) {
+    let abilities = this._getOrderedAbilities(config);
+    const { startFeatures, endFeatures } = this._getOrderedFeatures();
+    const orderedItems = [...startFeatures, ...abilities, ...endFeatures];
+
+    return Promise.all(orderedItems.map(async (item) => {
+      const embed = await item.system.toEmbed({ includeName: true });
+      embed.icon = item.system.getStatBlockIcon?.();
+      return embed;
+    }));
+  }
+
+  /* -------------------------------------------------- */
+  async _getAdvancementEmbeds(config) {
+    const advancements = this._getAdvancementItems();
+    //Pull Advancements, get each ability who's page ref is the same as the page ref for the retainer OR Not From Monsters
+    let finalPool = [];
+    for (let i in advancements) {
+      let pool = advancements[i].pool;
+      let level = advancements[i].requirements.level;
+      console.log(level);
+      for (let n in pool) {
+        let ability = await fromUuid(pool[n].uuid);
+        console.log(ability);
+        if ((ability.system.source.label === this.source.label) || (ability.system.source.book !== "Monsters")) {
+          finalPool.push({ level: level, ability: ability });
+        }
+      }
+    }
+    console.log(finalPool);
+    return Promise.all(finalPool.map(async (item) => {
+      const embed = await item.ability.system.toEmbed({ includeName: true });
+      embed.icon = item.ability.system.getStatBlockIcon?.();
+      return { level: item.level, ability: embed };
+    }));
+  }
+  /* -------------------------------------------------- */
+
+  /**
+   * Orders Ability Items in the same order
+   * as the keys in ds.CONFIG.abilities.types.
+   * @param {DocumentHTMLEmbedConfig} config  Configuration for embedding behavior.
+   * @returns {DrawSteelItem[]}
+   */
+  _getOrderedAbilities(config) {
+    const abilityTypes = Object.keys(ds.CONFIG.abilities.types);
+    return this.parent.items.documentsByType.ability
+      // Ancestry malice do not show by default
+      .filter(i => config.showAll || (i.system.category !== "maliceAncestry"))
+      .sort((a, b) => abilityTypes.indexOf(a.system.type) - abilityTypes.indexOf(b.system.type) || a.sort - b.sort);
+  }
+
+  /* -------------------------------------------------- */
+
+  /**
+   * Orders Feature Items via the `embedDisplay.displayAtEnd` flag.
+   * @returns {{ startFeatures: DrawSteelItem[], endFeatures: DrawSteelItem[] }}
+   */
+  _getOrderedFeatures() {
+    const features = this.parent.items.documentsByType.feature.toSorted((a, b) => a.sort - b.sort);
+
+    const [ startFeatures, endFeatures ] = features.partition(f => {
+      return !!f.getFlag(systemID, "embedDisplay.displayAtEnd");
+    });
+    return { startFeatures, endFeatures };
+  }
+  /* -------------------------------------------------- */
+  /**
+   * Finds the choices at 4th, 7th and 10th level.
+   * @returns {String} Choices - an array of UUIDs
+   */
+  _getAdvancementItems() {
+    const retainerClass = this.parent.items.documentsByType.class[0];
+    //i => [4, 7, 10].includes(i.value.requirements.level)
+    const choices = retainerClass.system.advancements.filter(i => (i.type === "itemGrant") && (i.requirements.level > this.level));
+    return choices;
+
   }
 }

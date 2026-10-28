@@ -312,6 +312,31 @@ document-embed, .item-embed {
     }
   }
 
+  div.actor.retainer {
+    .advancement-level{
+      min-width: unset;
+
+      background-image: linear-gradient(var(--color-statblock), transparent 1.5rem);
+      border-radius: 4px;
+
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      font-size: 1em;
+      font-family: 'Newsreader', serif;
+      padding: .25em;
+      margin-inline: .5em;
+
+      h3 {
+          margin: 0;
+      }
+    
+    }
+    ul.advancement{
+      padding-bottom: 0px;
+    }
+  }
+
   /* Non-Actor/Item Embeds inside a Draw Steel application */
   .draw-steel & {
     .roll-table-embed {
