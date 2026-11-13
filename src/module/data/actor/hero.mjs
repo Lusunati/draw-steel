@@ -8,7 +8,7 @@ import FormulaField from "../fields/formula-field.mjs";
 /**
  * @import { DrawSteelActor, DrawSteelItem } from "../../documents/_module.mjs";
  * @import AdvancementChain from "../../utils/advancement-chain.mjs";
- * @import { SummonPortfolio } from "./_types"
+ * @import { CompanionSummon, SummonPortfolio } from "./_types"
  */
 
 const fields = foundry.data.fields;
@@ -229,6 +229,9 @@ export default class HeroModel extends CreatureModel {
     // Winded is set in the base classes derived data, so this needs to run after
     this.stamina.min = -this.stamina.winded;
 
+    for (const companionInfo of this._companionAdvancements ?? []) {
+      for (const skill of companionInfo.skills) if (skill in ds.CONFIG.skills.list) this.skills.value.add(skill);
+    }
     // Handling for trait advancements
     for (const skill of this._traits.skill ?? []) {
       if (skill in ds.CONFIG.skills.list) this.skills.value.add(skill);
@@ -438,6 +441,16 @@ export default class HeroModel extends CreatureModel {
    * @internal
    */
   _summonPortfolios = {};
+
+  /* -------------------------------------------------- */
+
+  /**
+   * Internal array used to cache summon advancements to track the available summons in the portfolio.
+   * This record is populated during `prepareEmbeddedDocuments`.
+   * @type {CompanionSummon[]}
+   * @internal
+   */
+  _companionAdvancements = [];
 
   /* -------------------------------------------------- */
 

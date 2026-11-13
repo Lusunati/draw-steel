@@ -4,7 +4,7 @@ import "./data/_types";
 import "./documents/_types";
 import "./helpers/_types";
 import "./utils/advancement/_types";
-import { DrawSteelActor, DrawSteelChatMessage, DrawSteelItem } from "./documents/_module.mjs";
+import { DrawSteelActiveEffect, DrawSteelActor, DrawSteelChatMessage, DrawSteelCombatantGroup, DrawSteelItem } from "./documents/_module.mjs";
 import { PowerRoll, ProjectRoll } from "./rolls/_module.mjs";
 import FollowerModel from "./data/item/follower.mjs";
 import Level from "@client/documents/level.mjs";
@@ -20,6 +20,22 @@ export interface PowerRollModifiers {
 export interface PowerRollTargets {
   uuid: string;
   modifiers: PowerRollModifiers;
+}
+
+export interface DamageOrigin {
+  messageId: string | null;
+  partId: string | null;
+  abilityUuid: string | null;
+  actorUuid: string | null;
+  tokenUuid: string | null;
+}
+
+export interface DamageApplication {
+  actor?: DrawSteelActor;
+  group?: DrawSteelCombatantGroup;
+  actors?: DrawSteelActor[];
+  before: { value: number; temporary?: number };
+  after: { value: number; temporary?: number };
 }
 
 export interface RollPromptOptions {
@@ -67,9 +83,20 @@ export interface TokenSurfaceResults {
   level: Level | null;
 }
 
+export interface PerformSummonOptions {
+  /** How many tokens to summon. */
+  count: number;
+  /** Effects to add to the summoned actors, evaluating based on this actor's roll data. */
+  effects: DrawSteelActiveEffect[];
+  /** Items to add to the summoned actors. */
+  effects: DrawSteelItem[];
+}
+
 declare module "./utils/advancement/node.mjs" {
   export default interface AdvancementNode {
     /** Assigned by the Chain Configuration Dialog. */
     enrichedDescription?: string;
+    /** Assigned by Companion Choice Advancements. */
+    skills?: string[];
   }
 }

@@ -22,6 +22,19 @@ interface SummonEffectPool {
   level: number;
 }
 
+interface SummonItemPool {
+  uuid: string;
+  level: number;
+}
+
+interface SummonInfo {
+  effects: DrawSteelActiveEffect[];
+  uuid: string;
+  count: number;
+  /** Only included if signature. */
+  cost?: number;
+}
+
 export type ActorChoice = {
   /** The UUID of the actor. */
   uuid: string;
@@ -34,6 +47,7 @@ declare module "./summon-choice-advancement.mjs" {
     chooseN: number | null;
     pool: SummonChoicePool[];
     effects: SummonEffectPool[];
+    items: SummonItemPool[];
   }
 }
 

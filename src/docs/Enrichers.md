@@ -2,7 +2,7 @@
 
 ## Actor Embeds
 
-NPC Actors can be embedded into enriched text via the @Embed&ZeroWidthSpace;[uuid] syntax. (Only NPC Actors can be embedded in this way currently; support for Objects and Retainers is planned)
+NPC Actors can be embedded into enriched text via the @Embed&ZeroWidthSpace;[uuid] syntax. (Only NPC and Object Actors can be embedded in this way currently; support for Companions and Retainers is planned)
 
 This embed displays similarly as the statblocks in the book and contains the same relevant information there:
 
@@ -153,13 +153,17 @@ The `[[/apply]]` enricher allows you to link status effects, either from an item
 
 ## Potency
 
-The `[[potency]]` enricher allows you to construct enriched potency displays using the Draw Steel Glyphs. The a strength of `weak`, `average`, or `strong` is provided and the item is on an actor, it will pull the actor's potency value.
+The `[[potency]]` enricher allows you to construct enriched potency displays using the Draw Steel Glyphs. If the strength of `weak`, `average`, or `strong` is provided and the item is on an actor, it will pull the actor's potency value.
 
 - [&ZeroWidthSpace;[potency M weak]]: Displays `M<weak` without an actor or `M<[number]` with an actor.
 - [&ZeroWidthSpace;[potency A 2]]: Displays `A<2`.
 - [&ZeroWidthSpace;[potency reason 2]]: Displays `R<2`.
 - [&ZeroWidthSpace;[potency characteristic=I strength=weak]]: Displays `I<weak` without an actor or `I<[number]` with an actor.
 - [&ZeroWidthSpace;[potency characteristic=presence strength=1]]: Displays `P<1`.
+
+## Summon
+
+The `[[/summon]]` enricher creates a button that will place a token in the current scene, performing any necessary imports. For more details see [[Summoning]].
 
 ## HTML-mode to clean up text
 If an enricher is not working as intended, in the text editor in which you are trying to add the enricher try the following (see screenshot):

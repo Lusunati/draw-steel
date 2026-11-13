@@ -47,6 +47,7 @@ export default class ActorChoiceConfigurationDialog extends DSApplication {
   static PARTS = {
     body: {
       template: systemPath("templates/apps/advancement/actor-choice-configuration-dialog/body.hbs"),
+      scrollable: [".actor-choices"],
     },
     footer: {
       template: "templates/generic/form-footer.hbs",
@@ -154,7 +155,7 @@ export default class ActorChoiceConfigurationDialog extends DSApplication {
 
     const totalChosen = this.totalChosen;
 
-    context.actors = this.actors.map(e => {
+    context.actors = Array.from(this.actors).sort((a, b) => a.name.localeCompare(b.name, game.i18n.lang)).map(e => {
       const chosen = this.chosen.has(e.uuid) || (this.advancement.chooseN == null);
       const disabled = !chosen && (totalChosen >= this.advancement.chooseN);
       return {

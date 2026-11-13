@@ -1,4 +1,4 @@
-import { damageTypes, requiredInteger, setOptions } from "../helpers.mjs";
+import { damageTypes, extendedInteger, requiredInteger, setOptions } from "../helpers.mjs";
 import DamageRoll from "../../rolls/damage.mjs";
 import { DrawSteelChatMessage } from "../../documents/_module.mjs";
 
@@ -12,6 +12,7 @@ import SizeModel from "../models/size.mjs";
  * @import DrawSteelToken from "../../canvas/placeables/token.mjs";
  * @import AbilityModel from "../item/ability.mjs";
  * @import { CoreResource } from "./_types";
+ * @import { DamageOrigin } from "../../_types";
  * @import { AbilityBonus } from "../_types";
  */
 
@@ -48,6 +49,14 @@ export default class BaseActorModel extends DrawSteelSystemModel {
       targetModifiers: new fields.SchemaField({
         edges: requiredInteger({ min: null }),
         banes: requiredInteger({ min: null }),
+        forcedMovement: new fields.SchemaField({
+          push: requiredInteger({ min: null }),
+          pull: requiredInteger({ min: null }),
+          slide: requiredInteger({ min: null }),
+        }),
+      }, { persisted: false }),
+      fall: new fields.SchemaField({
+        agility: new fields.BooleanField({ initial: true }),
       }, { persisted: false }),
     });
 
@@ -66,7 +75,7 @@ export default class BaseActorModel extends DrawSteelSystemModel {
     });
 
     schema.damage = new fields.SchemaField({
-      immunities: damageTypes(requiredInteger, { all: true }),
+      immunities: damageTypes(extendedInteger, { all: true, untyped: true }),
       weaknesses: damageTypes(requiredInteger, { all: true }),
     });
 
@@ -205,6 +214,17 @@ export default class BaseActorModel extends DrawSteelSystemModel {
     return Object.entries(ds.CONFIG.echelons).reduce((acc, [key, value]) => {
       return this.level >= value.threshold ? Number(key) : acc;
     }, 1);
+  }
+
+  /* -------------------------------------------------- */
+
+  /**
+   * The actor's keywords; a fresh set from the actual prepared data.
+   * Returns an empty set if the actor subtype does not have keywords (e.g. heroes).
+   * @type {Set<string>}
+   */
+  get keywords() {
+    return new Set();
   }
 
   /* -------------------------------------------------- */
@@ -410,23 +430,32 @@ export default class BaseActorModel extends DrawSteelSystemModel {
   /* -------------------------------------------------- */
 
   /**
+   * The damage dealt by a fall.
+   * @param {number} distance   The effective height of the fall, in squares.
+   * @returns {number}
+   */
+  static fallDamage(distance) {
+    return distance < 2 ? 0 : Math.min(2 * distance, 50);
+  }
+
+  /* -------------------------------------------------- */
+
+  /**
    * Processes falls by calculating damage and then calling the chat part that makes the fall.
    * @param {DrawSteelToken} token The Token that is falling.
    * @param {number} dist          The distance straight down the actor is falling.
    */
   async processFall(token, dist) {
-    //Modify later to apply for net damage.
+    const fallDamage = this.constructor.fallDamage(dist);
 
-    const fallDamage = dist <= 2 ? 0 : Math.min(2 * dist, 50);
-
-    const roll = new DamageRoll(String(fallDamage), {});
+    const roll = new DamageRoll(String(fallDamage), {}, { fallHeight: dist });
     await roll.evaluate();
 
     await DrawSteelChatMessage.create({
       title: _loc("DRAW_STEEL.ChatMessage.PARTS.falling.Label"),
       type: "standard",
       speaker: DrawSteelChatMessage.getSpeaker({ actor: this.parent }),
-      content: `<p>${_loc("DRAW_STEEL.ChatMessage.PARTS.falling.aftermath", { victim: this.parent.name, distance: fallDamage, damage: roll.formula })}</p>`,
+      content: `<p>${_loc("DRAW_STEEL.ChatMessage.PARTS.falling.aftermath", { victim: this.parent.name, distance: dist, damage: roll.formula })}</p>`,
       "system.parts": [{ type: "falling",
         rolls: [roll],
         flavor: _loc("DRAW_STEEL.ChatMessage.PARTS.falling.Label"),
@@ -461,7 +490,7 @@ export default class BaseActorModel extends DrawSteelSystemModel {
       if (!options.ignoredImmunities.includes("all") && !options.ignoredImmunities.includes(type)) acc[type] = amount;
       return acc;
     }, {});
-    const immunityAmount = Math.max(immunities.all ?? 0, immunities[options.type] ?? 0); // Null check in case type is not in immunities
+    const immunityAmount = Math.max(immunities.all ?? 0, immunities[options.type || "untyped"] ?? 0); // Null check in case type is not in immunities
     if (immunityAmount > 0) immunityAndWeakness.immunity = immunityAmount;
 
     return immunityAndWeakness;
@@ -475,6 +504,7 @@ export default class BaseActorModel extends DrawSteelSystemModel {
    * @param {object} [options] Options to modify the damage application.
    * @param {string} [options.type]   Valid damage type.
    * @param {Array<string>} [options.ignoredImmunities]  Which damage immunities to ignore.
+   * @param {DamageOrigin} [options.origin]  Where the damage came from, passed through to the Stamina update.
    * @returns {Promise<DrawSteelActor | DrawSteelCombatantGroup>}
    */
   async takeDamage(damage, options = {}) {
@@ -501,7 +531,7 @@ export default class BaseActorModel extends DrawSteelSystemModel {
     }
 
     // If there's damage left after weakness/immunities, apply damage to temporary stamina then stamina value
-    return this.parent.modifyTokenAttribute("stamina", -1 * damage, true, false);
+    return this.parent.modifyTokenAttribute("stamina", -1 * damage, true, false, { ds: { damageType: options.type, origin: options.origin } });
   }
 
   /* -------------------------------------------------- */
@@ -540,11 +570,15 @@ export default class BaseActorModel extends DrawSteelSystemModel {
         acc[type] = label;
         return acc;
       }, {}),
+      untyped: _loc("DRAW_STEEL.Actor.base.FIELDS.damage.immunities.untyped.label"),
     };
 
     const immunities = Object.entries(this.damage.immunities)
       .filter(([damageType, value]) => value > 0)
-      .map(([damageType, value]) => `<span class="immunity">${labels[damageType]} ${value}</span>`);
+      .map(([damageType, value]) => {
+        const amount = value === Infinity ? _loc("DRAW_STEEL.Actor.base.FIELDS.damage.immunities.allAmount") : value;
+        return `<span class="immunity">${labels[damageType]} ${amount}</span>`;
+      });
     const weaknesses = Object.entries(this.damage.weaknesses)
       .filter(([damageType, value]) => value > 0)
       .map(([damageType, value]) => `<span class="weakness">${labels[damageType]} ${value}</span>`);

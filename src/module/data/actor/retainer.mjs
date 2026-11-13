@@ -157,7 +157,14 @@ export default class RetainerModel extends CreatureModel {
    * @type {boolean}
    */
   get advancementReady() {
-    return this.retainer.mentor?.system.level > this.level;
+    return (this.retainer.mentor?.system.level > this.level) && this.class;
+  }
+
+  /* -------------------------------------------------- */
+
+  /** @inheritdoc */
+  get keywords() {
+    return new Set(this.retainer.keywords);
   }
 
   /* -------------------------------------------------- */

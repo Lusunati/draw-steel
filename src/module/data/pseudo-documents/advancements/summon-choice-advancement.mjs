@@ -1,11 +1,15 @@
 import ActorChoiceAdvancement from "./actor-choice-advancement.mjs";
+import DSDialog from "../../../applications/api/dialog.mjs";
 import { requiredInteger } from "../../helpers.mjs";
 
 /**
- * @import { DrawSteelActiveEffect, DrawSteelActor } from "../../../documents/actor.mjs";
+ * @import { ActorChoice, SummonInfo } from "./_types";
+ * @import { DrawSteelActiveEffect, DrawSteelActor, DrawSteelItem } from "../../../documents/_module.mjs";
+ * @import { SummonPortfolio } from "../../actor/_types";
  */
 
 const { ArrayField, DocumentUUIDField, NumberField, SchemaField } = foundry.data.fields;
+const { createFormGroup, createSelectInput, createNumberInput } = foundry.applications.fields;
 
 /**
  * An advancement that selects other actors from a pool for the Summoner.
@@ -14,7 +18,7 @@ export default class SummonChoiceAdvancement extends ActorChoiceAdvancement {
   /** @inheritdoc */
   static defineSchema() {
     return Object.assign(super.defineSchema(), {
-      cost: new NumberField({ initial: null, min: 1, integer: true }),
+      cost: new NumberField({ initial: null, min: 0, integer: true }),
       chooseN: new NumberField({ required: true, integer: true, min: 1, initial: 2 }),
       pool: new ArrayField(new SchemaField({
         uuid: new DocumentUUIDField({ embedded: false, type: "Actor" }),
@@ -22,6 +26,10 @@ export default class SummonChoiceAdvancement extends ActorChoiceAdvancement {
       })),
       effects: new ArrayField(new SchemaField({
         uuid: new DocumentUUIDField({ embedded: false, type: "ActiveEffect" }),
+        level: new NumberField({ min: 1, integer: true, max: 10, required: true }),
+      })),
+      items: new ArrayField(new SchemaField({
+        uuid: new DocumentUUIDField({ embedded: false, type: "Item" }),
         level: new NumberField({ min: 1, integer: true, max: 10, required: true }),
       })),
     });
@@ -43,11 +51,42 @@ export default class SummonChoiceAdvancement extends ActorChoiceAdvancement {
 
   /** @inheritdoc */
   get actorOptions() {
-    return Object.values(this.pool).reduce((options, entry) => {
+    return Object.values(this.pool).reduce((/** @type {ActorChoice[]} */ options, entry) => {
       const idx = fromUuidSync(entry.uuid);
       if (idx) options.push({ uuid: idx.uuid });
       return options;
     }, []);
+  }
+
+  /* -------------------------------------------------- */
+
+  /** @inheritdoc */
+  prepareBaseData() {
+    super.prepareBaseData();
+    // Signature minions don't have quantities
+    if (!this.cost) for (const actor of this.pool) actor.count = null;
+  }
+
+  /* -------------------------------------------------- */
+
+  /** @inheritdoc */
+  prepareDerivedData() {
+    super.prepareDerivedData();
+
+    const hero = this.document.actor;
+    if (!hero) return;
+
+    const flags = this.document.getFlag(ds.CONST.systemID, "advancement") ?? {};
+    const portfolio = hero.system._summonPortfolios[this.dsid] ??= [];
+    for (const option of this.pool) {
+      if (flags[this.id]?.selected.includes(option.uuid)) {
+        portfolio.push({
+          ...option,
+          cost: this.cost,
+          advancementUuid: this.uuid,
+        });
+      }
+    }
   }
 
   /* -------------------------------------------------- */
@@ -74,6 +113,15 @@ export default class SummonChoiceAdvancement extends ActorChoiceAdvancement {
       });
     }
 
+    ctx.summonItems = [];
+    for (const [i, item] of this.items.entries()) {
+      ctx.summonItems.push({
+        ...item,
+        index: i,
+        link: ds.utils.createDocumentLink(item.uuid)?.outerHTML ?? _loc("DRAW_STEEL.ADVANCEMENT.SHEET.unknownItem"),
+      });
+    }
+
     return ctx;
   }
 
@@ -88,6 +136,7 @@ export default class SummonChoiceAdvancement extends ActorChoiceAdvancement {
     switch (document.documentName) {
       case "ActiveEffect": return this.#handleActiveEffectDrop(document);
       case "Actor": return this.#handleActorDrop(document);
+      case "Item": return this.#handleItemDrop(document);
     }
   }
 
@@ -115,7 +164,7 @@ export default class SummonChoiceAdvancement extends ActorChoiceAdvancement {
    * @returns {Promise<DrawSteelActor>}
    */
   #handleActorDrop(actor) {
-    if (actor.type !== "npc") return void ui.notifications.error("DRAW_STEEL.ADVANCEMENT.WARNING.restrictedTypeSummon", {
+    if (!["npc", "object"].includes(actor.type)) return void ui.notifications.error("DRAW_STEEL.ADVANCEMENT.WARNING.restrictedTypeSummon", {
       format: { type: _loc(CONFIG.Actor.typeLabels[actor.type]) },
     });
     if (!actor.pack) return void ui.notifications.error("DRAW_STEEL.ADVANCEMENT.WARNING.requirePackSummon", { localize: true });
@@ -127,4 +176,134 @@ export default class SummonChoiceAdvancement extends ActorChoiceAdvancement {
     return this.update({ pool });
   }
 
+  /* -------------------------------------------------- */
+
+  /**
+   * Process a dropped item.
+   * @param {DrawSteelItem} item
+   */
+  #handleItemDrop(item) {
+    if (!item.pack || item.parent) return void ui.notifications.error("DRAW_STEEL.ADVANCEMENT.WARNING.requireStandaloneSummonItem", { localize: true });
+    const exists = this.items.some(k => k.uuid === item.uuid);
+    if (exists) return;
+
+    const items = foundry.utils.deepClone(this._source.items);
+    items.push({ uuid: item.uuid });
+    return this.update({ items });
+  }
+
+  /* -------------------------------------------------- */
+
+  /**
+   * Parse summoning info for a given actor portfolio and present a dialog to make a choice.
+   * @param {DrawSteelActor} hero   The actor doing the summoning.
+   * @param {string} portfolioKey   The DSID of the ability that is doing the summoning.
+   * @param {Object} [options={}]
+   * @param {boolean} [options.signatureOnly=false] Only show signature minions and hide the cost input?
+   * @returns {Promise<SummonInfo | null>} Returns null if dialog canceled or no valid summoning options.
+   */
+  static async getSummonInfo(hero, portfolioKey, { signatureOnly = false } = {}) {
+    /** @type {SummonPortfolio[]} */
+    const portfolio = hero.system._summonPortfolios[portfolioKey] ?? [];
+
+    const summonOptions = portfolio.reduce((options, o) => {
+      if (signatureOnly && (o.cost !== null)) return options;
+      const idx = fromUuidSync(o.uuid);
+      if (idx) options.push({
+        label: _loc("DRAW_STEEL.Actor.Summoning.ActorSelectDialog.optionLabel", {
+          name: idx.name,
+          cost: o.cost ?? _loc("DRAW_STEEL.Actor.Summoning.ActorSelectDialog.signature"),
+        }),
+        value: idx.uuid,
+        cost: o.cost,
+      });
+      return options;
+      // Reverse sort by cost + alpha sort
+    }, []).sort((a, b) => b.cost - a.cost || a.label.localeCompare(b.label));
+
+    if (!summonOptions.length) {
+      ui.notifications.error("DRAW_STEEL.Actor.Summoning.Errors.NO_OPTIONS", { localize: true });
+      return null;
+    }
+
+    const content = document.createElement("div");
+    const uuidSelect = createFormGroup({
+      label: "DRAW_STEEL.Actor.Summoning.ActorSelectDialog.uuid.label",
+      hint: "DRAW_STEEL.Actor.Summoning.ActorSelectDialog.uuid.hint",
+      input: createSelectInput({ name: "uuid", options: summonOptions, autofocus: true }),
+      localize: true,
+    });
+    const signatureCount = createFormGroup({
+      label: "DRAW_STEEL.Actor.Summoning.ActorSelectDialog.count.label",
+      hint: "DRAW_STEEL.Actor.Summoning.ActorSelectDialog.count.hint",
+      input: createNumberInput({ name: "count", min: 1, value: 1 }),
+      localize: true,
+    });
+    content.append(uuidSelect, signatureCount);
+
+    if (!signatureOnly) {
+      const resourceCost = createFormGroup({
+        label: "DRAW_STEEL.Actor.Summoning.ActorSelectDialog.cost.label",
+        hint: "DRAW_STEEL.Actor.Summoning.ActorSelectDialog.cost.hint",
+        input: createNumberInput({
+          name: "cost",
+          min: 1,
+          max: hero.system.hero.primary.value,
+          value: summonOptions[0].cost ?? 1,
+        }),
+        localize: true,
+      });
+      content.append(resourceCost);
+    }
+
+    const fd = await DSDialog.input({
+      content,
+      window: {
+        title: "DRAW_STEEL.Actor.Summoning.ActorSelectDialog.title",
+        icon: "fa-solid fa-transporter-2",
+      },
+      render: (ev, dialog) => {
+        /** @type {HTMLInputElement} */
+        const costInput = dialog.element.querySelector("[name=\"cost\"]");
+        if (!costInput) return;
+        /** @type {HTMLInputElement} */
+        const signatureInput = dialog.element.querySelector("[name=\"count\"]");
+        signatureInput.addEventListener("change", (e) => {
+          costInput.value = e.target.value;
+        });
+        /** @type {HTMLDivElement} */
+        const signatureGroup = signatureInput.closest(".form-group");
+        signatureGroup.hidden = summonOptions[0].cost !== null;
+        dialog.element.querySelector("[name=\"uuid\"]").addEventListener("change", (e) => {
+          const { cost } = portfolio.find(o => o.uuid === e.target.value);
+          signatureGroup.hidden = cost !== null;
+          costInput.value = cost ?? signatureInput.value;
+        });
+      },
+    });
+    if (!fd) return null;
+
+    const summonInfo = portfolio.find(o => o.uuid === fd.uuid);
+
+    /** @type {SummonChoiceAdvancement} */
+    const advancement = fromUuidSync(summonInfo.advancementUuid);
+
+    /** @type {DrawSteelActiveEffect[]} */
+    const effects = [];
+    for (const effectInfo of advancement.effects) {
+      if (hero.system.level < effectInfo.level) continue;
+      const effect = await fromUuid(effectInfo.uuid);
+      if (effect) effects.push(effect);
+    }
+
+    const returnInfo = {
+      effects,
+      uuid: fd.uuid,
+      count: summonInfo.count ?? fd.count,
+    };
+
+    if ("cost" in fd) returnInfo.cost = fd.cost;
+
+    return returnInfo;
+  }
 }

@@ -17,7 +17,8 @@ import enrichHTML from "../../utils/enrich-html.mjs";
  * @import { PowerRollModifiers } from "../../_types";
  * @import { PlaceAbilityOptions } from "./_types";
  * @import DrawSteelToken from "../../canvas/placeables/token.mjs";
- * @import { DrawSteelActor, DrawSteelTokenDocument } from "../../documents/_module.mjs";
+ * @import { DrawSteelTokenDocument } from "../../documents/_module.mjs";
+ * @import { PerformSummonOptions } from "../../_types.d.ts"
  */
 
 const fields = foundry.data.fields;
@@ -71,6 +72,7 @@ export default class AbilityModel extends BaseItemModel {
     schema.trigger = new fields.StringField({ required: true });
     schema.distance = new fields.SchemaField({
       type: new fields.StringField({ required: true, blank: false, initial: "self" }),
+      count: new FormulaField({ deterministic: true, initial: "1" }),
       primary: new FormulaField({ deterministic: true, initial: "1" }),
       secondary: new FormulaField({ deterministic: true, initial: "1" }),
       tertiary: new FormulaField({ deterministic: true, initial: "1" }),
@@ -414,6 +416,20 @@ export default class AbilityModel extends BaseItemModel {
   /* -------------------------------------------------- */
 
   /**
+   * Whether the ability is currently used as a melee or a ranged ability.
+   * A melee or ranged ability uses its selected mode, otherwise its Melee or Ranged keyword decides.
+   * @type {"melee" | "ranged" | null}
+   */
+  get rangeMode() {
+    if (this.distance.type === "meleeRanged") return this.damageDisplay;
+    const melee = this.keywords.has("melee");
+    if (melee === this.keywords.has("ranged")) return null;
+    return melee ? "melee" : "ranged";
+  }
+
+  /* -------------------------------------------------- */
+
+  /**
    * Cached reference to the resource name, reset during data prep.
    * @type {string}
    */
@@ -458,6 +474,7 @@ export default class AbilityModel extends BaseItemModel {
 
     context.distanceLabel = formattedLabels.distance;
     context.distanceTypes = Object.entries(config.distances).map(([value, { label }]) => ({ value, label }));
+    context.distanceCount = config.distances[this.distance.type]?.count ?? false;
     context.primaryDistance = config.distances[this.distance.type]?.primary ?? "";
     context.secondaryDistance = config.distances[this.distance.type]?.secondary ?? "";
     context.tertiaryDistance = config.distances[this.distance.type]?.tertiary ?? "";
@@ -536,7 +553,6 @@ export default class AbilityModel extends BaseItemModel {
    * @param {ApplicationConfiguration} [dialogOptions={}]   Options to be forwarded to the roll dialog.
    * @param {DatabaseCreateOperation} [messageOptions]      Options to be forwarded to the final created chat message.
    * @returns {Promise<DrawSteelChatMessage | null>}
-   * TODO: Add hooks based on discussion with module authors.
    */
   async use(config = {}, dialogOptions = {}, messageOptions = {}) {
     if (!this.actor) throw new Error("Abilities can only be used while embedded");
@@ -576,6 +592,8 @@ export default class AbilityModel extends BaseItemModel {
         return accumulator;
       }, {});
     }
+
+    if (Hooks.call("ds.preUseAbility", this.parent, config, dialogConfig) === false) return null;
 
     const fd = await AbilityConfigurationDialog.create(dialogConfig);
 
@@ -618,16 +636,14 @@ export default class AbilityModel extends BaseItemModel {
 
       const evaluatedRolls = [];
 
-      const targets = [];
+      const rollTargets = new Map();
 
       for (const context of fd.rolls) {
         // Strip from roll options
-        if (context.target) {
-          targets.push(context.target);
-          delete context.target;
-        }
-        const roll = new PowerRoll(dialogConfig.context.formula, {}, { 
-          flavor: _loc(PowerRoll.TYPES.ability.label), 
+        const target = context.target;
+        delete context.target;
+        const roll = new PowerRoll(dialogConfig.context.formula, {}, {
+          flavor: _loc(PowerRoll.TYPES.ability.label),
           criticalThreshold: this.power.roll.criticalThreshold,
           ...context,
         });
@@ -635,9 +651,12 @@ export default class AbilityModel extends BaseItemModel {
         await roll.evaluate({ allowInteractive: false });
 
         evaluatedRolls.push(roll);
+        if (target) rollTargets.set(roll, target);
       }
 
       evaluatedRolls.sort((a, b) => a.product - b.product);
+
+      const targets = evaluatedRolls.map(roll => rollTargets.get(roll)).filter(Boolean);
 
       if (!targets.length) {
         const tierNumber = evaluatedRolls[0].product;
@@ -676,6 +695,7 @@ export default class AbilityModel extends BaseItemModel {
             tier: roll.product,
             abilityUuid: this.parent.uuid,
             targetUuid: targets[index],
+            tokenUuid: roll.options.tokenUuid,
           };
 
           for (const damageEffect of this.power.effects.documentsByType.damage) {
@@ -692,6 +712,7 @@ export default class AbilityModel extends BaseItemModel {
           }
 
           delete roll.options.minions;
+          delete roll.options.tokenUuid;
 
           messageData.system.parts[partId] = rollPart;
         }
@@ -709,7 +730,9 @@ export default class AbilityModel extends BaseItemModel {
     }
 
     if (resourceSpend) await this.actor?.system.updateResource(resourceSpend * -1);
-    return DrawSteelChatMessage.create(messageData, messageOptions);
+    const message = await DrawSteelChatMessage.create(messageData, messageOptions);
+    Hooks.callAll("ds.useAbility", this.parent, message);
+    return message;
   }
 
   /* -------------------------------------------------- */
@@ -762,14 +785,22 @@ export default class AbilityModel extends BaseItemModel {
       modifiers.edges += foundry.utils.getProperty(targetActor, "system.combat.targetModifiers.edges") ?? 0;
       modifiers.banes += foundry.utils.getProperty(targetActor, "system.combat.targetModifiers.banes") ?? 0;
 
-      // Frightened condition checks
-      if (DrawSteelActiveEffect.isStatusSource(this.actor, targetActor, "frightened")) modifiers.banes += 1; // Attacking the target frightening the actor
-      if (DrawSteelActiveEffect.isStatusSource(targetActor, this.actor, "frightened")) modifiers.edges += 1; // Attacking the target the actor has frightened
+      // Targeted conditions that modify rolls between the affected creature and their source, such as frightened
+      for (const status of Object.values(CONFIG.statusEffects)) {
+        if (!status.sourceModifiers) continue;
+        const { againstSource, fromSource } = status.sourceModifiers;
+        const isAgainstSource = DrawSteelActiveEffect.isStatusSource(this.actor, targetActor, status.id); // Attacking the source of the actor's condition
+        const isFromSource = DrawSteelActiveEffect.isStatusSource(targetActor, this.actor, status.id); // Attacking a target the actor is the source for
+        for (const key of ["edges", "banes", "bonuses"]) {
+          if (isAgainstSource) modifiers[key] += againstSource?.[key] ?? 0;
+          if (isFromSource) modifiers[key] += fromSource?.[key] ?? 0;
+        }
+      }
 
       // Grabbed condition check - targeting a non-source adds a bane
       if (DrawSteelActiveEffect.isStatusSource(this.actor, targetActor, "grabbed") === false) modifiers.banes += 1;
       // Prone condition check - targeting prone with melee gets an edge
-      if (targetActor.statuses.has("prone") && this.keywords.has("melee")) modifiers.edges += 1;
+      if (targetActor.statuses.has("prone") && (this.rangeMode === "melee")) modifiers.edges += 1;
       // Restrained condition check - targeting restrained gets an edge
       if (targetActor.statuses.has("restrained")) modifiers.edges += 1;
       // Surprised condition check - targeting surprised gets an edge
@@ -779,9 +810,11 @@ export default class AbilityModel extends BaseItemModel {
     // Modifiers requiring just a controlled token
     if (token) {
       // Flanking checks
-      if (this.keywords.has("melee") && this.keywords.has("strike") && token.isFlanking(target)) modifiers.edges += 1;
+      if ((this.rangeMode === "melee") && this.keywords.has("strike") && token.isFlanking(target)) modifiers.edges += 1;
       // High Ground Check - targeting (Target's Size) Squares Lower gets an edge.
-      if (((token.document.elevation - target.document.elevation) >= target.document.depth) && !(this.actor.statuses.has("flying"))) modifiers.edges += 1;
+      if (((token.document.elevation - target.document.elevation) >= target.document.depth) && !(this.actor.statuses.has("fly"))) modifiers.edges += 1;
+      // Ranged Distraction check - a ranged strike with an adjacent enemy gets a bane
+      if ((this.rangeMode === "ranged") && this.keywords.has("strike") && token.hasEnemyAdjacent()) modifiers.banes += 1;
     }
 
     // Modifiers requiring both a controlled token and the targeted token to have an actor
@@ -868,9 +901,10 @@ export default class AbilityModel extends BaseItemModel {
       }
       // additional adjustments to conform to DS rules
       switch (type) {
-        case "rectangle": // Special wall handling since it's a bunch of 1 x 1 spots.
-          shapeData.width ??= canvas.dimensions.distancePixels;
-          shapeData.height ??= canvas.dimensions.distancePixels;
+        case "grid":
+          shapeData.offsets = [{ i: 0, j: 0 }];
+          break;
+        case "rectangle":
           shapeData.anchorX = 0.5;
           shapeData.anchorY = 0.5;
           break;
@@ -950,45 +984,10 @@ export default class AbilityModel extends BaseItemModel {
   /**
    * Places summons.
    * @param {string} uuid               The UUID of the actor to summon. If this points to a compendium actor a copy will be imported.
-   * @param {Object} options
-   * @param {number} [options.count=1]  How many tokens to summon.
-   * @param {DrawSteelActiveEffect[]} [options.effects] Effects to add to the summoned actors, evaluating based on this actor's roll data.
+   * @param {PerformSummonOptions} options
    * @returns {Promise<DrawSteelTokenDocument[] | null>} Returns null if the user did not have permissions.
    */
-  async performSummon(uuid, { count = 1, effects = [] } = {}) {
-    /** @type {DrawSteelActor} */
-    const sourceActor = await fromUuid(uuid);
-
-    if (!sourceActor) return void ui.notifications.error("DRAW_STEEL.Actor.Summoning.Errors.ACTOR_CREATE", { localize: true });
-
-    // TODO: Rework into registry or other service to improve performance with large actor collections
-    let worldActor = game.actors.find(a => (a._stats.compendiumSource === uuid) && (a.getFlag(systemID, "summonSource") === this.parent.uuid));
-
-    if (!worldActor) {
-      // Ensure the user has permission to drop the actor and create a Token.
-      if (!game.user.can("ACTOR_CREATE")) {
-        ui.notifications.warn("DRAW_STEEL.Actor.Summoning.Errors.ACTOR_CREATE", { localize: true });
-        return null;
-      }
-
-      worldActor = await game.actors.importFromCompendium(game.packs.get(sourceActor.pack), sourceActor.id, {
-        "flags.draw-steel.summonSource": this.parent.uuid,
-      }, { keepId: true });
-    }
-
-    const actorUpdates = { effects: [] };
-
-    const replacementData = this.parent.getRollData();
-
-    for (const e of effects) {
-      const data = game.items.fromCompendium(e, { keepId: true, clearFolder: true });
-      for (const change of data.system.changes) {
-        if (typeof change.value !== "string") continue;
-        change.value = DrawSteelActiveEffect._replaceDataRefs(change.value, replacementData);
-      }
-      actorUpdates.effects.push(data);
-    }
-
-    return canvas.tokens.placeActor(worldActor, { count, actorUpdates });
+  async performSummon(uuid, options = {}) {
+    return ds.utils.performSummon(uuid, this.parent, options);
   }
 }

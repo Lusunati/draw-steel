@@ -131,43 +131,52 @@ export const speedOptions = ["teleport", "fly", "walk", "swim", "burrow", "climb
 
 /**
  * Configuration information for damage types.
- * @type {Record<string, {label: string, color: foundry.utils.Color}>}
+ * @type {Record<string, {label: string, icon: string, color: foundry.utils.Color}>}
  */
 export const damageTypes = {
   acid: {
     label: "DRAW_STEEL.DAMAGE_TYPE.Acid",
+    icon: "fa-solid fa-flask-vial",
     color: foundry.utils.Color.fromString("#14ff14"),
   },
   cold: {
     label: "DRAW_STEEL.DAMAGE_TYPE.Cold",
+    icon: "fa-solid fa-snowflake",
     color: foundry.utils.Color.fromString("#14ffd0"),
   },
   corruption: {
     label: "DRAW_STEEL.DAMAGE_TYPE.Corruption",
+    icon: "fa-solid fa-galaxy",
     color: foundry.utils.Color.fromString("#7b00a8"),
   },
   fire: {
     label: "DRAW_STEEL.DAMAGE_TYPE.Fire",
+    icon: "fa-solid fa-fire",
     color: foundry.utils.Color.fromString("#ff870f"),
   },
   holy: {
     label: "DRAW_STEEL.DAMAGE_TYPE.Holy",
+    icon: "fa-solid fa-sun",
     color: foundry.utils.Color.fromString("#ffed61"),
   },
   lightning: {
     label: "DRAW_STEEL.DAMAGE_TYPE.Lightning",
+    icon: "fa-solid fa-bolt",
     color: foundry.utils.Color.fromString("#ffff00"),
   },
   poison: {
     label: "DRAW_STEEL.DAMAGE_TYPE.Poison",
+    icon: "fa-solid fa-skull-crossbones",
     color: foundry.utils.Color.fromString("#008500"),
   },
   psychic: {
     label: "DRAW_STEEL.DAMAGE_TYPE.Psychic",
+    icon: "fa-solid fa-brain",
     color: foundry.utils.Color.fromString("#d40cc3"),
   },
   sonic: {
     label: "DRAW_STEEL.DAMAGE_TYPE.Sonic",
+    icon: "fa-solid fa-volume-high",
     color: foundry.utils.Color.fromString("#999999"),
   },
 };
@@ -204,6 +213,14 @@ preLocalize("healingTypes", { key: "label" });
  * @property {number} [defaultSpeed]  Used by slowed to infer the default speed to reduce to.
  * @property {Record<string, Set<string>>} [restrictions] Restrictions on ability usage imposed by this condition.
  *                                    The system currently supports `dsid` and `type` based restrictions.
+ * @property {SourceModifiers} [sourceModifiers] Power roll modifiers between an affected creature and the source of
+ *                                    this condition. Requires `targeted`.
+ */
+
+/**
+ * @typedef SourceModifiers
+ * @property {Partial<PowerRollModifiers>} [againstSource]  Added to the affected creature's ability rolls against their source.
+ * @property {Partial<PowerRollModifiers>} [fromSource]     Added to the source's ability rolls against the affected creature.
  */
 
 /**
@@ -232,6 +249,10 @@ export const conditions = {
     rule: "Compendium.draw-steel.journals.JournalEntry.hDhdILCi65wpBgPZ.JournalEntryPage.bXiI9vUF3tF78qXg",
     targeted: true,
     maxSources: 1,
+    sourceModifiers: {
+      againstSource: { banes: 1 },
+      fromSource: { edges: 1 },
+    },
   },
   grabbed: {
     name: "DRAW_STEEL.ActiveEffect.Conditions.Grabbed.name",
@@ -956,6 +977,19 @@ export const hero = {
   },
 };
 preLocalize("hero.tokenSpends", { keys: ["label", "messageContent"], sort: true });
+
+/* -------------------------------------------------- */
+
+/**
+ * Configuration information for retainers.
+ */
+export const companion = {
+  /**
+   * Available companion classes. By default only for the Beastheart, but can be extended turning the "add class" button into a choice dialog.
+   * @type {string[]}
+   */
+  companionClasses: ["Compendium.draw-steel.classes.Item.qhsGsuYIEa5TQXzK"],
+};
 
 /* -------------------------------------------------- */
 
@@ -1751,10 +1785,12 @@ const abilityDistances = {
   },
   cube: {
     label: "DRAW_STEEL.Item.ability.Distance.Cube",
+    count: true,
     primary: "DRAW_STEEL.Item.ability.Distance.Length",
     secondary: "DRAW_STEEL.Item.ability.Distance.Ranged",
     area: {
       type: "rectangle",
+      count: "count",
       width: "primary",
       height: "primary",
     },
@@ -1765,11 +1801,13 @@ const abilityDistances = {
   },
   line: {
     label: "DRAW_STEEL.Item.ability.Distance.Line",
+    count: true,
     primary: "DRAW_STEEL.Item.ability.Distance.Length",
     secondary: "DRAW_STEEL.Item.ability.Distance.Width",
     tertiary: "DRAW_STEEL.Item.ability.Distance.Ranged",
     area: {
       type: "line",
+      count: "count",
       length: "primary",
       width: "secondary",
     },
@@ -1783,7 +1821,7 @@ const abilityDistances = {
     primary: "DRAW_STEEL.Item.ability.Distance.Squares",
     secondary: "DRAW_STEEL.Item.ability.Distance.Ranged",
     area: {
-      type: "rectangle",
+      type: "grid",
       count: "primary",
     },
     embedLabel: "DRAW_STEEL.Item.ability.DistanceEmbed.Wall",
@@ -2058,7 +2096,7 @@ export const Advancement = {
   companion: {
     label: "TYPES.Advancement.companion",
     defaultImage: "icons/svg/pawprint.svg",
-    itemTypes: new Set(["class"]),
+    itemTypes: new Set(["class", "subclass"]),
     documentClass: pseudoDocuments.advancements.CompanionChoiceAdvancement,
   },
   itemGrant: {

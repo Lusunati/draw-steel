@@ -27,6 +27,7 @@ interface CoreResource {
   target: foundry.abstract.DataModel;
   path: string;
   minimum: number;
+  tracking: number;
 }
 
 interface FreeStrike {
@@ -50,6 +51,16 @@ interface Combat {
   targetModifiers: {
     edges: number;
     banes: number;
+    /** Added to the distance of forced movement that affects this actor, by movement type. */
+    forcedMovement: {
+      push: number;
+      pull: number;
+      slide: number;
+    }
+  }
+  fall: {
+    /** Whether this actor can reduce the effective height of a fall by their Agility score. */
+    agility: boolean;
   }
 }
 
@@ -64,6 +75,12 @@ export interface SummonPortfolio {
   count: string;
   cost: number | null;
   advancementUuid: string;
+}
+
+export interface CompanionSummon {
+  uuid: string;
+  advancementUuid: string;
+  skills: Array<string>;
 }
 
 declare module "./base-actor.mjs" {
@@ -118,7 +135,9 @@ declare module "./companion.mjs" {
       keywords: Set<string> & { list: string[]; labels: string };
       role: string;
       roleLabel: string;
-      master: DrawSteelActor;
+      master: Omit<DrawSteelActor, "system"> & { system: import("./hero.mjs").default };
+      rampage: number;
+      skills: Set<string>;
     }
   }
 }

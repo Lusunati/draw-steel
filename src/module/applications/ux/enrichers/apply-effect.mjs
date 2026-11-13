@@ -42,7 +42,7 @@ export async function enricher(match, options) {
   if (parsedConfig.originRollData) linkConfig.originRollData = parsedConfig.originRollData;
   if (options.relativeTo) linkConfig.origin = options.relativeTo.uuid;
 
-  /** @type {DrawSteelItem} */
+  /** @type {DrawSteelActor | DrawSteelItem} */
   const doc = (["Actor", "Item"].includes(options.relativeTo?.documentName)) ? options.relativeTo : null;
 
   for (const val of parsedConfig.values) {
@@ -66,9 +66,9 @@ export async function enricher(match, options) {
       continue;
     }
 
-    // Canonical Statuses
+    // Canonical Statuses. CONFIG.statusEffects is still an array so need to check against numeric keys.
     const status = CONFIG.statusEffects[normalizedValue];
-    if (status) {
+    if (status && !Number.isNumeric(normalizedValue)) {
       linkConfig.type = "status";
       linkConfig.status = status.id;
       parsedConfig.name ||= status.name;

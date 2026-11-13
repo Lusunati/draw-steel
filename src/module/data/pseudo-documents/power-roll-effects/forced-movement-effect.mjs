@@ -2,7 +2,7 @@ import { requiredInteger, setOptions } from "../../helpers.mjs";
 import BasePowerRollEffect from "./base-power-roll-effect.mjs";
 import FormulaField from "../../fields/formula-field.mjs";
 
-/** @import { ForcedMovementSchema } from "./_types" */
+/** @import { ForcedMovementSchema, TextOptions } from "./_types" */
 
 const { NumberField, SchemaField, SetField, StringField } = foundry.data.fields;
 
@@ -113,19 +113,22 @@ export default class ForcedMovementPowerRollEffect extends BasePowerRollEffect {
 
   /**
    * @param {1 | 2 | 3} tier
+   * @param {TextOptions} [options]
    * @inheritdoc
    */
-  toText(tier) {
+  toText(tier, options = {}) {
     const tierValue = this.forced[`tier${tier}`];
     const isVertical = tierValue.properties.has("vertical");
     const baseDistance = this.actor
       ? ds.utils.evaluateFormula(tierValue.distance, this.item.getRollData(), { contextName: this.uuid })
       : tierValue.distance;
 
-    // Group movement types by their final distance value (base + bonus)
+    const targetBonuses = foundry.utils.getProperty(options, "target.system.combat.targetModifiers.forcedMovement");
+
+    // Group movement types by their final distance value (base + bonus + the target's own bonus)
     const distanceGroups = Map.groupBy([...tierValue.movement], movementType => {
       if (!this.actor) return baseDistance;
-      return baseDistance + this.forced.bonuses[movementType];
+      return baseDistance + this.forced.bonuses[movementType] + (targetBonuses?.[movementType] ?? 0);
     });
 
     // Format the output
@@ -159,9 +162,16 @@ export default class ForcedMovementPowerRollEffect extends BasePowerRollEffect {
       distanceString = formatter.format(formattedParts);
     }
 
-    const potencyString = this.toPotencyHTML(tier);
+    const potencyString = this.toPotencyHTML(tier, options.potencyBonus);
     const escapedDisplay = Handlebars.escapeExpression(tierValue.display);
     const finalText = escapedDisplay.replaceAll("{{potency}}", potencyString);
     return finalText.replaceAll("{{forced}}", distanceString);
+  }
+
+  /* -------------------------------------------------- */
+
+  /** @inheritdoc */
+  targetOption(tier, target) {
+    return this.toText(tier, { target });
   }
 }

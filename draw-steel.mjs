@@ -88,6 +88,8 @@ Hooks.once("init", function () {
 
   // Better art for default roll table pack image
   CONFIG.RollTable.compendiumBanner = "systems/draw-steel/assets/banners/tables.webp";
+  // Default to grid based shapes
+  CONFIG.Region.templateModeConfig.gridBased = true;
 
   // Assign canvas-related classes
   CONFIG.Token.objectClass = canvas.placeables.DrawSteelToken;
@@ -198,6 +200,11 @@ Hooks.once("init", function () {
   );
   DocumentSheetConfig.registerSheet(
     foundry.documents.JournalEntryPage, DS_CONST.systemID,
+    applications.sheets.journal.MapLocationPage,
+    { makeDefault: true, types: ["map"] },
+  );
+  DocumentSheetConfig.registerSheet(
+    foundry.documents.JournalEntryPage, DS_CONST.systemID,
     applications.sheets.journal.DrawSteelImageSheet,
     { makeDefault: true, types: ["image"] },
   );
@@ -233,9 +240,10 @@ Hooks.once("init", function () {
   CONFIG.TextEditor.enrichers = [
     applications.ux.enrichers.applyEffect,
     applications.ux.enrichers.lookup,
+    applications.ux.enrichers.potency,
     applications.ux.enrichers.reference,
     applications.ux.enrichers.roll,
-    applications.ux.enrichers.potency,
+    applications.ux.enrichers.summon,
   ];
 
   Object.assign(CONFIG.fontDefinitions, {

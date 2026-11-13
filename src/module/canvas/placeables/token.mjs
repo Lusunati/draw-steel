@@ -116,6 +116,27 @@ export default class DrawSteelToken extends foundry.canvas.placeables.Token {
   }
 
   /* -------------------------------------------------- */
+  
+  /**
+   * Returns all enemies adjacent to a target with line of effect, ignoring defeated tokens.
+   * @param {DrawSteelToken} target 
+   * @returns {DrawSteelToken[]}
+   */
+  getAdjacentEnemies(target) {
+    const ignoreList = [CONST.TOKEN_DISPOSITIONS.NEUTRAL, CONST.TOKEN_DISPOSITIONS.SECRET];
+    const enemyTokens = [];
+    for (const token of canvas.tokens.placeables) {
+      if ((token === this) || (this.document.disposition === token.document.disposition) || ignoreList.includes(token.document.disposition)) continue;
+      if (token.actor?.statuses.has(CONFIG.specialStatusEffects.DEFEATED)) continue;
+      if (!token.isAdjacentTo(target) || !token.hasLineOfEffect(target)) continue;
+
+      enemyTokens.push(token);
+    }
+
+    return enemyTokens;
+  }
+
+  /* -------------------------------------------------- */
 
   /**
    * Does this token have line of effect to the target token.
@@ -178,6 +199,16 @@ export default class DrawSteelToken extends foundry.canvas.placeables.Token {
     }
 
     return false;
+  }
+
+  /* -------------------------------------------------- */
+
+  /**
+   * Returns if there is any opponent tokens adjacent to this token.
+   * @returns {boolean}
+   */
+  hasEnemyAdjacent() {
+    return this.getAdjacentEnemies(this).length > 0;
   }
 
   /* -------------------------------------------------- */
